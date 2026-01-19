@@ -1,0 +1,2 @@
+## Typeorm do not support much of migration out of the box for mongodb
+## I have included some of the helpers needed from my personal projects
