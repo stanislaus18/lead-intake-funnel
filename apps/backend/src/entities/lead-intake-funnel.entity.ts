@@ -1,15 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type LeadIntakeFunnelDocument = HydratedDocument<LeadIntakeFunnelDao>;
+export type LeadIntakeFunnelDocument = HydratedDocument<LeadIntakeFunnelEntity>;
 
-@Schema({ collection: 'family-approval', versionKey: false })
-export class LeadIntakeFunnelDao {
+@Schema({ collection: 'lead-intake-funnel'})
+export class LeadIntakeFunnelEntity {
   @Prop({ required: true })
   version: string;
 
   @Prop({ required: true })
-  leadId: string;
+  id: string;
 
   @Prop({ required: true })
   contactId: string;
@@ -24,4 +24,4 @@ export class LeadIntakeFunnelDao {
   projectId: string;
 }
 
-export const FamilyApprovalSchema = SchemaFactory.createForClass(LeadIntakeFunnelDao);
+export const LeadIntakeFunnelSchema = SchemaFactory.createForClass(LeadIntakeFunnelEntity);

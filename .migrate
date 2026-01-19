@@ -1,9 +1,13 @@
 {
-  "lastRun": "1768833478292-createleadintakefunnelcollection.ts",
+  "lastRun": null,
   "migrations": [
     {
       "title": "1768833478292-createleadintakefunnelcollection.ts",
-      "timestamp": 1768837054932
+      "timestamp": null
+    },
+    {
+      "title": "1768839032755-contactcollection.ts",
+      "timestamp": null
     }
   ]
 }
