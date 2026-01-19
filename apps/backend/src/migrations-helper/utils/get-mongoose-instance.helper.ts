@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import migrationsConfig from './../config/migration.config';
+import migrationsConfig from '../config/migration.config';
 
 export const getMongooseInstance = async (): Promise<typeof mongoose> => {
   const uri = migrationsConfig.uri;

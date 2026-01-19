@@ -1,4 +1,4 @@
-import { getMongooseInstance } from './../utils/get-mongoose-instance.helper';
+import { getMongooseInstance } from '../utils/get-mongoose-instance.helper';
 
 export async function up(): Promise<void> {
   const mongoose = await getMongooseInstance();
