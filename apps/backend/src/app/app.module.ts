@@ -8,11 +8,11 @@ import { AppService } from './app.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: process.env.MONGO_HOST || 'localhost',
-      port: parseInt(process.env.MONGO_PORT) || 27017,
-      database: process.env.MONGO_DB || 'mydb',
-      username: process.env.MONGO_USER || 'root',
-      password: process.env.MONGO_PASS || 'example',
+      host: process.env.MONGO_HOST,
+      port: parseInt(process.env.MONGO_PORT),
+      database: process.env.MONGO_DB,
+      username: process.env.MONGO_USER,
+      password: process.env.MONGO_PASS,
       synchronize: true, // ⚠️ Only for dev; auto creates schema
       // useUnifiedTopology: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],

@@ -1,0 +1,1 @@
+export const LEAD_INTAKE_FUNNEL_COLLECTION = 'lead-intake-funnel';
