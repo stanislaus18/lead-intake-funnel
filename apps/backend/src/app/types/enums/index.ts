@@ -18,3 +18,4 @@ export * from './ownership-category.enum';
 export * from './timeline.enum';
 export * from './foundation-status.enum';
 export * from './disposal-type.enum';
+export * from './lead-stage.enum';

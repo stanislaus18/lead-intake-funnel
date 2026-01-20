@@ -1,38 +1,45 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { IsOptional, IsString, IsEnum, IsEmail, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsEmail,
+  IsBoolean,
+  IsOptional,
+  IsNotEmpty,
+} from 'class-validator';
 import { SalutationEnum } from '../types/enums';
 
 export class ContactInformationDto {
   @ApiProperty({ description: 'Salutation' })
-  @IsOptional()
   @IsEnum(SalutationEnum)
+  @IsOptional()
   readonly salutation: SalutationEnum;
 
   @ApiProperty({ description: 'First name' })
-  @IsOptional()
   @IsString()
   readonly firstName: string;
 
   @ApiProperty({ description: 'Last name' })
-  @IsOptional()
   @IsString()
   readonly lastName: string;
 
   @ApiProperty({ description: 'Phone number' })
-  @IsOptional()
   @IsString()
   readonly phone: string;
 
   @ApiProperty({ description: 'Email address' })
-  @IsOptional()
-  @IsEmail()
+  @IsEmail({}, { message: 'Email must be a valid email address' })
+  @IsNotEmpty({ message: 'Email is missing' })
   readonly email: string;
 
-  @ApiProperty({ description: 'Newsletter single opt-in' })
-  @IsOptional()
+  @ApiProperty({
+    description: 'Newsletter single opt-in',
+    default: false,
+  })
   @IsBoolean()
-  readonly newsletterSingleOptIn: boolean;
+  @IsOptional()
+  readonly newsletterSingleOptIn: boolean = false;
 
   static from(data: ContactInformationDto): ContactInformationDto {
     return this.create({

@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { IsOptional, IsString, IsDate } from 'class-validator';
+import { plainToInstance, Type } from 'class-transformer';
+import { IsOptional, IsString, IsDate, ValidateNested, IsNotEmpty } from 'class-validator';
+import { ContactDto } from './contact.dto';
+import { BuildingDto } from './building.dto';
+import { HeatingSystemDto } from './heating-system.dto';
+import { ProjectDto } from './project.dto';
 
 export class LeadIntakeFunnelDto {
   @ApiProperty({ description: 'Version of the lead intake funnel' })
@@ -8,30 +12,29 @@ export class LeadIntakeFunnelDto {
   @IsString()
   readonly version: string;
 
-  @ApiProperty({ description: 'Lead intake funnel ID' })
-  @IsOptional()
-  @IsString()
-  readonly id: string;
+  @ApiProperty({
+    type: ContactDto,
+    description: 'Associated Contact',
+  })
+  @ValidateNested()
+  @IsNotEmpty()
+  @Type(() => ContactDto)
+  readonly contact: ContactDto;
 
-  @ApiProperty({ description: 'Associated contact ID' })
+  @ApiProperty({ description: 'Associated building' })
   @IsOptional()
-  @IsString()
-  readonly contactId: string;
+  @Type(() => BuildingDto)
+  readonly building: BuildingDto;
 
-  @ApiProperty({ description: 'Associated building ID' })
+  @ApiProperty({ description: 'Associated heating system' })
   @IsOptional()
-  @IsString()
-  readonly buildingId: string;
+  @Type(() => HeatingSystemDto)
+  readonly heatingSystem: HeatingSystemDto;
 
-  @ApiProperty({ description: 'Associated heating system ID' })
+  @ApiProperty({ description: 'Associated project' })
   @IsOptional()
-  @IsString()
-  readonly heatingSystemId: string;
-
-  @ApiProperty({ description: 'Associated project ID' })
-  @IsOptional()
-  @IsString()
-  readonly projectId: string;
+  @Type(() => ProjectDto)
+  readonly project: ProjectDto;
 
   @ApiProperty({ description: 'Date when record was created' })
   @IsOptional()
@@ -46,11 +49,10 @@ export class LeadIntakeFunnelDto {
   static from(data: LeadIntakeFunnelDto): LeadIntakeFunnelDto {
     return this.create({
       ...(data?.version && { version: data.version }),
-      ...(data?.id && { id: data.id }),
-      ...(data?.contactId && { contactId: data.contactId }),
-      ...(data?.buildingId && { buildingId: data.buildingId }),
-      ...(data?.heatingSystemId && { heatingSystemId: data.heatingSystemId }),
-      ...(data?.projectId && { projectId: data.projectId }),
+      ...(data?.contact && { contact: data.contact }),
+      ...(data?.building && { building: data.building }),
+      ...(data?.heatingSystem && { heatingSystem: data.heatingSystem }),
+      ...(data?.project && { project: data.project }),
       ...(data?.createdAt && { createdAt: data.createdAt }),
       ...(data?.updatedAt && { updatedAt: data.updatedAt }),
     });

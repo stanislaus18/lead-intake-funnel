@@ -8,11 +8,8 @@ import { AppService } from './app.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: process.env.MONGO_HOST,
-      port: parseInt(process.env.MONGO_PORT),
+      url: 'mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin',
       database: process.env.MONGO_DB,
-      username: process.env.MONGO_USER,
-      password: process.env.MONGO_PASS,
       synchronize: true, // ⚠️ Only for dev; auto creates schema
       // useUnifiedTopology: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],

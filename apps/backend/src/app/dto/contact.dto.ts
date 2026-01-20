@@ -1,28 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { plainToInstance } from 'class-transformer';
-import { IsOptional, IsString, IsDate, ValidateNested } from 'class-validator';
+import { IsOptional, IsDate, ValidateNested, IsNotEmpty } from 'class-validator';
 import { ContactInformationDto } from './contact-information.dto';
 import { AddressDto } from './address.dto';
 import { MarketingDto } from './marketing.dto';
 
 export class ContactDto {
-  @ApiProperty({ description: 'Contact ID' })
-  @IsOptional()
-  @IsString()
-  readonly id: string;
-
-  @ApiProperty({ description: 'Contact type' })
-  @IsOptional()
-  @IsString()
-  readonly type: string;
-
   @ApiProperty({
     type: ContactInformationDto,
     description: 'Contact information details',
   })
-  @IsOptional()
   @ValidateNested()
+  @IsNotEmpty()
   @Type(() => ContactInformationDto)
   readonly contactInformation: ContactInformationDto;
 
@@ -50,8 +40,6 @@ export class ContactDto {
 
   static from(data: ContactDto): ContactDto {
     return this.create({
-      ...(data?.id && { id: data.id }),
-      ...(data?.type && { type: data.type }),
       ...(data?.contactInformation && {
         contactInformation: ContactInformationDto.from(data.contactInformation),
       }),

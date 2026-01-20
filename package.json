@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "frontend": "nx serve frontend",
-    "backend": "nx serve backend",
+    "backend": "concurrently \"nx build backend --watch\" \"nodemon dist/apps/backend/main.js --watch dist/apps/backend\"",
     "migrate:up": "npx ts-migrate-mongoose up",
     "migrate:down": "npx ts-migrate-mongoose down",
     "create:migration": "npx ts-migrate-mongoose create",
@@ -61,6 +61,7 @@
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/test-utils": "^2.4.6",
+    "concurrently": "^9.2.1",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-playwright": "^1.6.2",
