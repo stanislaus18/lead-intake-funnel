@@ -46,7 +46,9 @@ function selectedBuilding(item: string) {
 </script>
 
 <template>
-  <p class="text-center">In was für einem Gebäude wohnst du?</p>
+  <p class="title">
+    In was für einem Gebäude wohnst du?
+  </p>
   <div class="building-container">
     <div
       v-for="item in items"
@@ -54,7 +56,10 @@ function selectedBuilding(item: string) {
       class="box"
       @click="selectedBuilding(item)"
     >
-      <img :src="svgMap[item]" alt="Building type image" />
+      <img
+        :src="svgMap[item]"
+        alt="Building type image"
+      >
       <p>{{ item }}</p>
     </div>
   </div>
@@ -67,37 +72,14 @@ function selectedBuilding(item: string) {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 16px;
-}
-
-.box {
-  width: 200px;
-  height: 200px;
-  border: 2px solid black;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 50px;
-  cursor: pointer;
 }
 
-.box img {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 12px;
-}
-
-.box p {
+.title {
   text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
-/* Mobile friendly: stack nicely */
-@media (max-width: 480px) {
-  .box {
-    width: 100%;
-    max-width: 200px;
-  }
-}
 </style>

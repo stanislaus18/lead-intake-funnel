@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
 import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import FlurbreadthSVG from '@/assets/Flurbreadth.avif';
 
 const router = useRouter();
 
 const store = useLeadStore();
 
-const items = ['niedrig als 180cm', '180cm', 'hoher als 199cm'];
+const items = ['Ja', 'Nein'];
 
-function selectGasType(item: string) {
+function selectType(item: string) {
   // set into the state
-  store.setCurrentView('ownUse');
+  store.setCurrentView('heatingRoomEntranceHeight');
 }
 </script>
 
 <template>
   <p>
-    Welche Höhe hat dein Heizungsraum?
+    Ist der Laufweg zu deinem Heizungsraum an jeder Stelle mindestens 65cm breit?
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectGasType(item)">
+    <img :src="FlurbreadthSVG" alt="Building type image" style="width: 500px;" />
+    <p>Hinweis: Unser Team benötigt einen Laufweg mit einer durchgehenden Breite von mindestens 65 cm für die Installation der größeren Komponenten wie den Wasserspeichern.</p>
+  </div>
+  <div class="list-container">
+    <div class="list-item" v-for="item in items" :key="item" @click="selectType(item)">
       {{ item  }}
     </div>
   </div>
@@ -30,7 +36,6 @@ function selectGasType(item: string) {
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 

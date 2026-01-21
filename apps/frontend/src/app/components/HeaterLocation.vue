@@ -6,24 +6,22 @@ const router = useRouter();
 
 const store = useLeadStore();
 
-const items = [1, 2, 3, 4, 5, 6, 7];
+const items = ['Keller', 'Erdgeschoss', 'Obergeschoss', 'Dachgeschoss'];
 
-function selectUnit(item: number) {
+function selectUnit(item: string) {
   // set into the state
   store.setResidentialUnit(item);
-  store.setCurrentView('ownUse');
+  store.setCurrentView('heatingRoomFloor');
 }
 </script>
 
 <template>
   <p>
-    Wie viele Wohneinheiten befinden sich in deinem Gebäude? Die Anzahl der
-    Wohneinheiten ist wichtig für eine genaue Kostenermittlung und die
-    Abschätzung deiner Förderhöhe. Bitte wähle eine Option
+    Auf welcher Etage befindet sich dein derzeitiger Heizungsraum?
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectUnit(item)">
-      {{ item === 7 ? 'Mehr als 6' : item }}
+    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
+      {{ item }}
     </div>
   </div>
 </template>

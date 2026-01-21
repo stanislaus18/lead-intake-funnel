@@ -6,21 +6,22 @@ const router = useRouter();
 
 const store = useLeadStore();
 
-const items = ['Ja', 'Nein', 'Weiss ich nicht'];
+const items = ['Erdgas', 'Öl', 'Fernwärme', 'Pelletheizung', 'Sonstige'];
 
 function selectGasType(item: string) {
   // set into the state
-  store.setCurrentView('ownUse');
+  store.setCurrentView('heatingConsumption');
 }
 </script>
 
 <template>
   <p>
-    Womit heizt du aktuell?Ist deine Fußbodenheizung vor 1990 verlegt worden?
+    Womit heizt du aktuell?
+    Bitte wähle eine Option
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectGasType(item)">
-      {{ item  }}
+    <div class="list-item" v-for="item in items" :key="item" @click="selectGasType(item)">
+      {{ item }}
     </div>
   </div>
 </template>

@@ -1,25 +1,28 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
 import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import FlurhoheSVG from '@/assets/Flurhohe.avif';
 
 const router = useRouter();
 
 const store = useLeadStore();
 
-const items = ['Ja', 'Nein'];
+const items = ['niedrig als 180cm', '180cm', 'hoher als 199cm'];
 
-function selectGasType(item: string) {
+function selectType(item: string) {
   // set into the state
-  store.setCurrentView('ownUse');
+  store.setCurrentView('heatingRoomWidth');
 }
 </script>
 
 <template>
   <p>
-    Steht dein Haus unter Denkmalschutz?
+    Welche Höhe hat dein Heizungsraum?
   </p>
+<img :src="FlurhoheSVG" alt="Building type image" style="width: 500px;" />
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectGasType(item)">
+    <div class="list-item" v-for="item in items" :key="item" @click="selectType(item)">
       {{ item  }}
     </div>
   </div>
@@ -30,7 +33,6 @@ function selectGasType(item: string) {
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 

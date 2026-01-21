@@ -1,39 +1,42 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
 import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import NoSvg from '@/assets/No.svg';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import YesSvg from '@/assets/Yes.svg';
 
 const router = useRouter();
 
 const store = useLeadStore();
 
-const items = [1, 2, 3, 4, 5, 6, 7, 8,9];
+const items = ['Ja', 'Nein'];
 
-function selectUnit(item: number) {
+function userClicked(item: string) {
   // set into the state
-  store.setResidentialUnit(item);
-  store.setCurrentView('ownUse');
+  store.setCurrentView('householdIncome');
 }
 </script>
 
 <template>
   <p>
-    Wie viele Wohneinheiten befinden sich in deinem Gebäude? Die Anzahl der
-    Wohneinheiten ist wichtig für eine genaue Kostenermittlung und die
-    Abschätzung deiner Förderhöhe. Bitte wähle eine Option
+    Steht dein Haus unter Denkmalschutz?
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectUnit(item)">
-      {{ item === 9 ? 'Mehr als 8' : item }}
-    </div>
+      <div class="button-container">
+    <button class="box" @click="userClicked('yes')"><img :src="YesSvg" alt="Building type image" />
+      <p>Ja</p></button>
+    <button class="box" @click="userClicked('no')"><img :src="NoSvg" alt="Building type image" />
+      <p>Nein</p></button>
+  </div>
   </div>
 </template>
 
 <style scoped>
-.list-container {
+.button-container {
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 

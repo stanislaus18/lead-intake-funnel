@@ -52,3 +52,58 @@ pre {
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 }
+
+
+.box {
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.box:hover {
+  background-color: black;
+  color: white;
+}
+
+.box img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 12px;
+  transition: filter 0.3s ease;
+}
+
+.box:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.box p {
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .box {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.description {
+  margin-bottom: 1.5rem;
+  color: #4b5563;
+  line-height: 1.6;
+}

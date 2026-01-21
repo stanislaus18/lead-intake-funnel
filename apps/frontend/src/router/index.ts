@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
-  { path : '/', component: () => import('../app/building-type/DetermineBuildingType.vue') },
+  { path : '/', component: () => import('../app/components/ShellSP.vue') },
 ];
 
 export default createRouter({

@@ -6,29 +6,26 @@ const router = useRouter();
 
 const store = useLeadStore();
 
-const items = [1, 2, 3, 4, 5, 6, 7];
+const items = [1, 2, 3, 4, 5, 6, 7, 8,9];
 
-function nextPage() {
+function selectUnit(item: number) {
   // set into the state
-  store.setCurrentView('noOfPerson');
+  store.setResidentialUnit(item);
+  store.setCurrentView('heatingFuel');
 }
 </script>
 
 <template>
   <p>
-    Beheizte und beheizbare Fläche
-Damit wir deine neue Wärmepumpe optimal auslegen können, benötigen wir die Fläche aller Räume, die über einen funktionsfähigen Heizkörper und / oder Fußbodenheizung verfügen, unabhängig von aktueller Nutzung oder Heizbetrieb.
+    Wie viele Wohneinheiten befinden sich in deinem Gebäude? Die Anzahl der
+    Wohneinheiten ist wichtig für eine genaue Kostenermittlung und die
+    Abschätzung deiner Förderhöhe. Bitte wähle eine Option
   </p>
-  <div>
-    <p>Wie groß ist die gesamte beheizbare Fläche deines Gebäudes (in m²)?</p>
-    <input type="number" placeholder="Fläche in m² eingeben" />
+  <div class="list-container">
+    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
+      {{ item === 9 ? 'Mehr als 8' : item }}
+    </div>
   </div>
-    <div>
-         <p>Wie viele Quadratmeter davon werden tatsächlich beheizt?</p>
-    <input type="number" placeholder="Fläche in m² eingeben" />
-  </div>
-
-  <button @click="nextPage()">Continue</button>
 </template>
 
 <style scoped>

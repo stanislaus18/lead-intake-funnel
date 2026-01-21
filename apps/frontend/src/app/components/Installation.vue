@@ -20,7 +20,7 @@ function selectUnit(item: number) {
     Ab wann willst du ultra-effizient heizen?
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectUnit(item)">
+    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
       {{ item === 7 ? 'Mehr als 6' : item }}
     </div>
   </div>

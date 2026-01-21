@@ -2,18 +2,24 @@ import { defineStore } from 'pinia';
 
 export const useLeadStore = defineStore('lead', {
   state: () => ({
-    lead: {},
+    lead: {} as any,
     currentView: 'buildingType',
+    routeList: ['buildingType'],
   }),
   actions: {
     setBuildingType(immoType: string) {
       this.lead = { ...this.lead, buildingInformation: { immoType } };
     },
     setResidentialUnit(residentialUnits: number) {
-      this.lead = { ...this.lead, buildingInformation: { residentialUnits } };
+      this.lead = { ...this.lead, buildingInformation: { ...this.lead.buildingInformation, residentialUnits } };
     },
     setCurrentView(view: string) {
       this.currentView = view;
+       this.routeList.push(view);
+    },
+    removeRouteFormList() {
+       this.routeList.pop();
+       this.currentView = this.routeList[this.routeList.length - 1];
     },
   },
   getters: {

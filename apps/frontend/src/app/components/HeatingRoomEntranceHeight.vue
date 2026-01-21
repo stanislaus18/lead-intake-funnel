@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
 import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import FloorhohelengthSVG from '@/assets/Floorhohelength.avif';
 
 const router = useRouter();
 
@@ -8,19 +10,33 @@ const store = useLeadStore();
 
 const items = ['Ja', 'Nein'];
 
-function selectGasType(item: string) {
+function selectType(item: string) {
   // set into the state
-  store.setCurrentView('ownUse');
+  store.setCurrentView('listedBuilding');
 }
 </script>
 
 <template>
   <p>
-    Welche Höhe hat dein Heizungsraum?
+    Ist der Laufweg zu deinem Heizungsraum an jeder Stelle mindestens 180cm
+    hoch?
   </p>
   <div class="list-container">
-    <div v-for="item in items" :key="item" @click="selectGasType(item)">
-      {{ item  }}
+    <img :src="FloorhohelengthSVG" alt="Building type image" style="width: 500px" />
+    <p>
+      Wichtig: Zur Installation der neuen Heizungsanlage und insbesondere der
+      neuen Komponenten wie den Wasserspeichern benötigen wir einen Laufweg mit
+      einer durchgehenden Höhe von mindestens 180cm.
+    </p>
+  </div>
+  <div class="list-container">
+    <div
+      class="list-item"
+      v-for="item in items"
+      :key="item"
+      @click="selectType(item)"
+    >
+      {{ item }}
     </div>
   </div>
 </template>
@@ -30,7 +46,6 @@ function selectGasType(item: string) {
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 
@@ -40,7 +55,7 @@ function selectGasType(item: string) {
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
-  transition: 
+  transition:
     background-color 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -51,5 +66,4 @@ function selectGasType(item: string) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 </style>

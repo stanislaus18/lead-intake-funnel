@@ -12,7 +12,7 @@ const items = [
 ];
 
 function selectedBuilding(item: string) {  
-   store.setCurrentView('residentialUnit');
+   store.setCurrentView('heatingTypeForRoom');
 }
 </script>
 

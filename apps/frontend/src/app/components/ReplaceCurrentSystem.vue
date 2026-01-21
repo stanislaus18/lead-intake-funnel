@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import NoSvg from '@/assets/No.svg';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import YesSvg from '@/assets/Yes.svg';
 
 import { useLeadStore } from './../../stores/leadStore';
 const store = useLeadStore();
 
 const router = useRouter();
+
 
 function userClickedYes(answer: string) {
    store.setCurrentView('heatingDetails');
@@ -21,18 +26,22 @@ function userClickedNo(answer: string) {
     Soll die aktuelle Heizungsanlage komplett ersetzt werden?
   </p>
   <div class="list-container">
-    <button @click="userClickedYes()">Ja</button>
-    <button @click="userClickedNo()">Nein</button>
+      <div class="button-container">
+    <button class="box" @click="userClickedYes('yes')"><img :src="YesSvg" alt="Building type image" />
+      <p>Ja</p></button>
+    <button class="box" @click="userClickedNo('no')"><img :src="NoSvg" alt="Building type image" />
+      <p>Nein</p></button>
+  </div>
   </div>
 </template>
 
 <style scoped>
-.list-container {
-  width: 600px;
-  margin: 40px auto; /* center horizontally */
+.button-container {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  column-gap: inherit;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .list-item {

@@ -6,26 +6,24 @@ const router = useRouter();
 
 const store = useLeadStore();
 
-const items = [1, 2, 3, 4, 5, 6, 7];
+const items = ['Unter 40.000€ (Brutto)', 'Über 40.000€ (Brutto)', 'Keine Antwort'];
 
-function nextPage() {
+function selectUnit(item: number) {
   // set into the state
-  store.setCurrentView('noOfPerson');
+  store.setResidentialUnit(item);
+  store.setCurrentView('installation');
 }
 </script>
 
 <template>
-  <p>Bitte gib deinen akuellen Jahresverbrauch in kWh an</p>
   <p>
-    Den Verbrauch findest du z.B. auf den Rechnungen deines Energieversorgers.
+    Wie hoch liegt dein Haushaltsjahreseinkommen?
   </p>
-  <div>
-    <p>Jahresverbrauch in kWh</p>
-
-    <input type="number" placeholder="Fläche in m² eingeben" />
+  <div class="list-container">
+    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
+      {{ item === 7 ? 'Mehr als 6' : item }}
+    </div>
   </div>
-
-  <button @click="nextPage()">Continue</button>
 </template>
 
 <style scoped>
@@ -43,7 +41,7 @@ function nextPage() {
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
-  transition:
+  transition: 
     background-color 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -54,4 +52,5 @@ function nextPage() {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 </style>

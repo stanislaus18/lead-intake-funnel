@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-
 import { useLeadStore } from './../../stores/leadStore';
-const store = useLeadStore();
+import { useRouter } from 'vue-router';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import FlurplanSvg from '@/assets/Flurplan.avif';
 
 const router = useRouter();
 
-function useClicked(answer: string) {
-   store.setCurrentView('replaceCurrentSystem');
-}
+const store = useLeadStore();
 
+const items = ['Weniger als 4 qm', 'Mehr als 4 qm'];
+
+function selectType(item: string) {
+  // set into the state
+  store.setCurrentView('heatingRoomHeight');
+}
 </script>
 
 <template>
   <p>
-    Nutzt du zumindest eine Wohneinheit in deinem Gebäude selbst?
+    How large is the usable area for the heating system in your boiler room?
   </p>
+  <img :src="FlurplanSvg" alt="Building type image" style="width: 500px;" />
   <div class="list-container">
-    <button @click="useClicked('yes')">Ja</button>
-    <button @click="useClicked('no')">Nein</button>
+    <div class="list-item" v-for="item in items" :key="item" @click="selectType(item)">
+      <p>{{ item  }}</p>
+    </div>
   </div>
 </template>
 
@@ -27,7 +33,6 @@ function useClicked(answer: string) {
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 
@@ -37,7 +42,7 @@ function useClicked(answer: string) {
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
-  transition:
+  transition: 
     background-color 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -48,4 +53,5 @@ function useClicked(answer: string) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 </style>
