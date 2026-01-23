@@ -4,9 +4,10 @@ import NoSvg from '@/assets/No.svg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import YesSvg from '@/assets/Yes.svg';
 
-import { setCurrentView } from './../composables';
+import { setCurrentView, setFullReplacementOfHeatingSystemPlanned } from './../composables';
 
 function onClicked(answer: string) {
+  setFullReplacementOfHeatingSystemPlanned(answer);
   if (answer === 'yes') {
     setCurrentView('heatingDetails');
   } else {

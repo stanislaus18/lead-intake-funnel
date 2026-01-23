@@ -17,3 +17,5 @@ export * from './set-height-pathway';
 export * from './set-heritage-protection';
 export * from './set-household-income';
 export * from './set-installation-timeline';
+export * from './set-contact-information';
+export * from './set-full-replacement-of-heating-system-planned';

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { setCurrentView, setOwnerOccupiedHousing } from './../composables';
+import { setCurrentView, setContactInformation } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import VamoPng from '@/assets/VamoLogo.png';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -25,7 +25,12 @@ const errors = ref({
 });
 
 function useClicked(answer: string) {
-  console.log('Form Data Submitted:', formData.value);
+  setContactInformation({
+    firstName: formData.value.firstName,
+    lastName: formData.value.lastName,
+    email: formData.value.email,
+    phone: formData.value.phone,
+  });
 }
 
 function handleSubmit() {

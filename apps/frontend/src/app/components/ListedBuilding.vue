@@ -11,7 +11,7 @@ const store = useLeadStore();
 function userClicked(item: string) {
   setHeritageProtection(item);
   // set into the state
-  if (item === 'Nein') {
+  if (item === 'Ja') {
     setCurrentView('notApplicableHeatingHeritage');
     return;
   }
