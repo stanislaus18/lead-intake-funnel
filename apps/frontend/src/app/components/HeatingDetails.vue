@@ -1,15 +1,52 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { setBuildingLivingSpace, setHeatedArea, setCurrentView } from './../composables';
 
 const store = useLeadStore();
 
-function nextPage() {
-  // set into the state
-  store.setCurrentView('noOfPerson');
+const totalArea = ref('');
+const heatedArea = ref('');
+const errors = ref({
+  totalArea: false,
+  heatedArea: false,
+});
+
+function validateAndNextPage() {
+  // Reset errors
+  errors.value = {
+    totalArea: false,
+    heatedArea: false,
+  };
+
+  // Validate fields
+  const totalAreaValue = parseFloat(totalArea.value);
+  const heatedAreaValue = parseFloat(heatedArea.value);
+
+  let isValid = true;
+
+  if (!totalArea.value || totalAreaValue <= 0) {
+    errors.value.totalArea = true;
+    isValid = false;
+  }
+
+  if (!heatedArea.value || heatedAreaValue <= 0) {
+    errors.value.heatedArea = true;
+    isValid = false;
+  }
+
+  // Only proceed if both fields are valid
+  if (isValid) {
+    // Save values to store if needed
+    setBuildingLivingSpace(totalAreaValue);
+    setHeatedArea(heatedAreaValue);
+    setCurrentView('noOfPerson');
+  }
 }
+
+defineExpose({
+  validateAndNextPage,
+});
 </script>
 
 <template>
@@ -25,16 +62,26 @@ function nextPage() {
       <p class="label">
         Wie groß ist die gesamte beheizbare Fläche deines Gebäudes (in m²)?
       </p>
-      <input type="number" placeholder="Fläche in m² eingeben" class="input" />
+      <input
+        v-model="totalArea"
+        type="number"
+        placeholder="Fläche in m² eingeben"
+        :class="['input', { 'input-error': errors.totalArea }]"
+      />
+      <p v-if="errors.totalArea" class="error-message">Dieses Feld ist erforderlich</p>
     </div>
     <div class="form-group">
       <p class="label">
         Wie viele Quadratmeter davon werden tatsächlich beheizt?
       </p>
-      <input type="number" placeholder="Fläche in m² eingeben" class="input" />
+      <input
+        v-model="heatedArea"
+        type="number"
+        placeholder="Fläche in m² eingeben"
+        :class="['input', { 'input-error': errors.heatedArea }]"
+      />
+      <p v-if="errors.heatedArea" class="error-message">Dieses Feld ist erforderlich</p>
     </div>
-
-    <button @click="nextPage()" class="btn">Continue</button>
   </div>
 </template>
 
@@ -68,18 +115,18 @@ function nextPage() {
   ring-color: #3b82f6;
 }
 
-.btn {
-  padding: 0.5rem 1.5rem;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.input-error {
+  border-color: #dc2626;
+  background-color: #fee2e2;
 }
 
-.btn:hover {
-  background-color: #2563eb;
+.input-error:focus {
+  ring-color: #dc2626;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 </style>

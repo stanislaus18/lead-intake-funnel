@@ -17,7 +17,7 @@ function useClicked(item: string) {
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Womit heizt du aktuell?Ist deine Fußbodenheizung vor 1990 verlegt worden?
   </p>
   <div class="button-container">
@@ -43,23 +43,5 @@ function useClicked(item: string) {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 16px;
-}
-
-.list-item {
-  padding: 16px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.list-item:hover {
-  background-color: #f5f5f5;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 </style>

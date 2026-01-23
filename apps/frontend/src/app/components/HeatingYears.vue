@@ -11,19 +11,19 @@ const items = [
   '20+ Jahre',
 ];
 
-function selectedBuilding(item: string) {  
+function selectedYears(item: string) {  
    store.setCurrentView('heatingTypeForRoom');
 }
 </script>
 
 <template>
-  <p>In was für einem Gebäude wohnst du?</p>
-  <div class="container">
+  <p class="title">In was für einem Gebäude wohnst du?</p>
+  <div class="year-container">
     <div
       v-for="item in items"
       :key="item"
       class="box"
-      @click="selectedBuilding(item)"
+      @click="selectedYears(item)"
     >
       {{ item }}
     </div>
@@ -31,33 +31,9 @@ function selectedBuilding(item: string) {
 </template>
 
 <style scoped>
-.container {
-  min-height: 100vh;
+.year-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-.box {
-  width: 200px;
-  height: 200px;
-  border: 2px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-/* Mobile friendly: stack nicely */
-@media (max-width: 480px) {
-  .box {
-    width: 100%;
-    max-width: 200px;
-  }
+    gap: 16px;
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from 'vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 
 import { useLeadStore } from './../../stores/leadStore';
 import {
@@ -8,6 +8,8 @@ import {
 } from './../building-type/componentMap';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import ZurukSvg from '@/assets/Zuruk.svg';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import VorwartSvg from '@/assets/Vorwart.svg';
 
 /**
  * Ideally, we would keeping a seperate flow creator and inject into the store
@@ -16,6 +18,22 @@ const store = useLeadStore();
 
 const OtherBuildingTypes = defineAsyncComponent(defaultComponent);
 
+const childRef = ref(null);
+
+const hasValidateMethod = computed(() => {
+  return typeof childRef.value?.validateAndNextPage === 'function';
+});
+
+const hideBackButton = computed(() => {
+  return store.getCurrentView === 'personsInfo';
+});
+
+function triggerChild() {
+  if (hasValidateMethod.value) {
+    childRef.value.validateAndNextPage();
+  }
+}
+
 const componentToShow = computed(() => {
   return componentMap[store.getCurrentView] || OtherBuildingTypes;
 });
@@ -23,13 +41,20 @@ const componentToShow = computed(() => {
 
 <template>
   <div class="building-type-container">
-    <component :is="componentToShow" />
+    <component ref="childRef" :is="componentToShow" />
     <button
-      v-if="store.routeList.length > 1"
+      v-if="store.routeList.length > 1 && !hideBackButton"
       class="btn"
       @click="store.removeRouteFormList()"
     >
       <img :src="ZurukSvg" alt="Zurück image" /> Zurück
+    </button>     
+    <button
+      v-if="hasValidateMethod"
+      class="btn"
+      @click="triggerChild"
+    >
+     <img :src="VorwartSvg" alt="Weiter image" /> Weiter
     </button>
   </div>
 </template>
@@ -55,6 +80,10 @@ const componentToShow = computed(() => {
 .btn:hover {
   background-color: #000000;
   color: white;
+}
+
+.btn:hover img {
+  filter: invert(1) brightness(1.2);
 }
 
 img {

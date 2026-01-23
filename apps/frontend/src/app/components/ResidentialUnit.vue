@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const store = useLeadStore();
-
-const items = [1, 2, 3, 4, 5, 6, 7];
+  import { setResidentialUnit, setCurrentView } from './../composables';
+  const items = [1, 2, 3, 4, 5, 6, 7];
 
 function selectUnit(item: number) {
   // set into the state
-  store.setResidentialUnit(item);
-  store.setCurrentView('ownUse');
+  setResidentialUnit(item);
+  setCurrentView('ownUse');
 }
 </script>
 

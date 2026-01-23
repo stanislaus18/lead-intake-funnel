@@ -1,38 +1,42 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
+import { setCurrentView, setWidthPathway } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FlurbreadthSVG from '@/assets/Flurbreadth.avif';
-
-const router = useRouter();
 
 const store = useLeadStore();
 
 const items = ['Ja', 'Nein'];
 
-function selectType(item: string) {
+function selectAnswer(item: string) {
+  setWidthPathway(item);
+  if(item === 'Nein') {
+      setCurrentView('notApplicableHeatingLessWidth');
+      return;
+  } 
   // set into the state
-  store.setCurrentView('heatingRoomEntranceHeight');
+  setCurrentView('heatingRoomEntranceHeight');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Ist der Laufweg zu deinem Heizungsraum an jeder Stelle mindestens 65cm breit?
   </p>
   <div class="list-container">
-    <img :src="FlurbreadthSVG" alt="Building type image" style="width: 500px;" />
-    <p>Hinweis: Unser Team benötigt einen Laufweg mit einer durchgehenden Breite von mindestens 65 cm für die Installation der größeren Komponenten wie den Wasserspeichern.</p>
+    <img :src="FlurbreadthSVG" alt="Building type image" style="width: 200px;" />
+    <p><b>Hinweis:</b> Unser Team benötigt einen Laufweg mit einer durchgehenden Breite von mindestens 65 cm für die Installation der größeren Komponenten wie den Wasserspeichern.</p>
   </div>
   <div class="list-container">
-    <div class="list-item" v-for="item in items" :key="item" @click="selectType(item)">
-      {{ item  }}
+    <div class="list-item" v-for="item in items" :key="item" @click="selectAnswer(item)">
+      {{ item }}
     </div>
   </div>
 </template>
 
 <style scoped>
 .list-container {
+  place-content: center;
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
@@ -40,7 +44,7 @@ function selectType(item: string) {
 }
 
 .list-item {
-  padding: 16px 20px;
+  padding: 16px 70px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #fff;

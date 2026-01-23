@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { setInstallationTimeline, setCurrentView } from './../composables';
 
 const store = useLeadStore();
 
 const items = ['Sobald wie möglich', '3 - 6 Monate', '6-12 Monate', '12 - 24 Monate', 'Mehr als 24 Monate'];
 
-function selectUnit(item: number) {
+function selectUnit(item: string) {
   // set into the state
-  store.setResidentialUnit(item);
-  store.setCurrentView('ownUse');
+  setInstallationTimeline(item);
+  setCurrentView('personsInfo');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Ab wann willst du ultra-effizient heizen?
   </p>
   <div class="list-container">
     <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
-      {{ item === 7 ? 'Mehr als 6' : item }}
+      {{ item }}
     </div>
   </div>
 </template>
@@ -48,7 +46,8 @@ function selectUnit(item: number) {
 }
 
 .list-item:hover {
-  background-color: #f5f5f5;
+  background-color: black;
+  color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

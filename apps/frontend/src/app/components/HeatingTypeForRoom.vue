@@ -1,34 +1,39 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FussbodenheizungSvg from '@/assets/Fussbodenheizung.jpeg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import HeizkörperSvg from '@/assets/Heizkörper.jpeg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import HeizkörperUndFussbodenheizungSvg from '@/assets/HeizkörperUndFussbodenheizung.png';
+import { setCurrentView, setTypeOfHeating } from './../composables';
+
 const store = useLeadStore();
-const router = useRouter();
 
 const items = [
-  'Fussbodenheizung',
+  'Fußbodenheizung',
   'Heizkörper',
-  'Heizkörper und Fussbodenheizung',
+  'Heizkörper und Fußbodenheizung',
 ];
 
 const svgMap: Record<string, string> = {
-  'Fussbodenheizung': FussbodenheizungSvg,
-  'Heizkörper': HeizkörperSvg,
-  'Heizkörper und Fussbodenheizung': HeizkörperUndFussbodenheizungSvg,
+  Fußbodenheizung: FussbodenheizungSvg,
+  Heizkörper: HeizkörperSvg,
+  'Heizkörper und Fußbodenheizung': HeizkörperUndFussbodenheizungSvg,
 };
 
-function selectedBuilding(item: string) {  
-   store.setCurrentView('underFloorHeating');
+function selectedBuilding(item: string) {
+  setTypeOfHeating(item);
+  if(item === 'Fußbodenheizung') {
+    setCurrentView('underFloorHeating');
+    return;
+  }
+  setCurrentView('heaterLocation');
 }
 </script>
 
 <template>
-  <p>In was für einem Gebäude wohnst du?</p>
+  <p class="title">In was für einem Gebäude wohnst du?</p>
   <div class="building-container">
     <div
       v-for="item in items"
@@ -36,7 +41,7 @@ function selectedBuilding(item: string) {
       class="box"
       @click="selectedBuilding(item)"
     >
-     <img :src="svgMap[item]" alt="Building type image" />
+      <img :src="svgMap[item]" alt="Building type image" />
       <p>{{ item }}</p>
     </div>
   </div>

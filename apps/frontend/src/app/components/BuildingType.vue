@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
+import { setBuildingType, setCurrentView } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import EinfamilienhausSvg from '@/assets/Einfamilienhaus.svg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -9,9 +8,6 @@ import DoppelhausSvg from '@/assets/Doppelhaus.svg';
 import WohnungSvg from '@/assets/Wohnung.svg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import SonstigesSvg from '@/assets/Sonstiges.svg';
-
-const store = useLeadStore();
-const router = useRouter();
 
 const items = [
   'Einfamilienhaus / Zweifamilienhaus',
@@ -29,19 +25,19 @@ const svgMap: Record<string, string> = {
 
 function selectedBuilding(item: string) {
   // set into the state
-  store.setBuildingType(item);
+  setBuildingType(item);
 
   if (item === 'Wohnung') {
-    store.setCurrentView('apartment');
+    setCurrentView('apartment');
     return;
   }
 
   if (item === 'Sonstiges') {
-    store.setCurrentView('otherBuildingTypes');
+    setCurrentView('otherBuildingTypes');
     return;
   }
 
-  store.setCurrentView('residentialUnit');
+  setCurrentView('residentialUnit');
 }
 </script>
 

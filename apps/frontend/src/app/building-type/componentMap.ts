@@ -15,7 +15,6 @@ export const componentMap: Record<string, Component> = {
   heatingDetails: defineAsyncComponent(() => import(`${path}HeatingDetails.vue`)),
   noOfPerson: defineAsyncComponent(() => import(`${path}NoOfPerson.vue`)),
   heatingFuel: defineAsyncComponent(() => import(`${path}HeatingFuel.vue`)),
-  heatingConsumption: defineAsyncComponent(() => import(`${path}HeatingConsumption.vue`)),
   heatingYears: defineAsyncComponent(() => import(`${path}HeatingYears.vue`)),
   heatingTypeForRoom: defineAsyncComponent(() => import(`${path}HeatingTypeForRoom.vue`)),
   underFloorHeating: defineAsyncComponent(() => import(`${path}UnderFloorHeating.vue`)),
@@ -27,6 +26,16 @@ export const componentMap: Record<string, Component> = {
   listedBuilding: defineAsyncComponent(() => import(`${path}ListedBuilding.vue`)),
   householdIncome: defineAsyncComponent(() => import(`${path}HouseholdIncome.vue`)),
   installation: defineAsyncComponent(() => import(`${path}Installation.vue`)),
+  HeatingConsumptionKilogram: defineAsyncComponent(() => import(`${path}HeatingConsumptionKilogram.vue`)),
+  HeatingConsumptionkwh: defineAsyncComponent(() => import(`${path}HeatingConsumptionkwh.vue`)),
+  HeatingConsumptionLiter: defineAsyncComponent(() => import(`${path}HeatingConsumptionLiter.vue`)),
+  notApplicableHeating: defineAsyncComponent(() => import(`${path}NotApplicableHeating.vue`)),
+  notApplicableHeatingLocation: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLocation.vue`)),
+  notApplicableHeatingLessSpace: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessSpace.vue`)),
+  notApplicableHeatingLessHeight: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessHeight.vue`)),
+  notApplicableHeatingLessWidth: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessWidth.vue`)),
+  notApplicableHeatingHeritage: defineAsyncComponent(() => import(`${path}NotApplicableHeatingHeritage.vue`)),
+  personsInfo: defineAsyncComponent(() => import(`${path}PersonsInfo.vue`)),
 };
 
 export const defaultComponent = () => import(`${path}OtherBuildingTypes.vue`);

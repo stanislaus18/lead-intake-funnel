@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useLeadStore } from './../../stores/leadStore';
 
-const router = useRouter();
+const store = useLeadStore();
 
-function yes() {
-   router.push('/residentialUnit');
+const items = ['Ja', 'Nein'];
+
+function itemClicked(item: string) {
+  if (item === 'Ja') {
+    store.setCurrentView('residentialUnit');
+  } else {
+    store.setCurrentView('otherBuildingTypes');
+  }
 }
-
-function no() {
-   router.push('/otherBuildingTypes');
-}
-</script>
+</script>``
 
 <template>
-  <p>
+  <p class="title">
     Liegt die Wohnung im EG und besitzt ein eigenes Heizsystem (Gasetagenheizung
-    o.ä.)? Bitte wähle eine Option
+    o.ä.)?
   </p>
+  <p class="description">Bitte wähle eine Option</p>
   <div class="list-container">
-    <button @click="yes()">Ja</button>
-    <button @click="no()">Nein</button>
+    <div
+      class="list-item"
+      v-for="item in items"
+      :key="item"
+      @click="itemClicked(item)"
+    >
+      {{ item }}
+    </div>
   </div>
 </template>
 
@@ -34,7 +43,7 @@ function no() {
 
 .list-item {
   padding: 16px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
@@ -45,8 +54,9 @@ function no() {
 }
 
 .list-item:hover {
-  background-color: #f5f5f5;
+  background-color: #000;
+  color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(f, f, f, 0.1);
 }
 </style>

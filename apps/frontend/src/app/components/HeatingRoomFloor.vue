@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
+import { setCurrentView, setBoilerRoomSize } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FlurplanSvg from '@/assets/Flurplan.avif';
-
-const router = useRouter();
 
 const store = useLeadStore();
 
 const items = ['Weniger als 4 qm', 'Mehr als 4 qm'];
 
 function selectType(item: string) {
+  if(item === 'Weniger als 4 qm') {
+     setCurrentView('notApplicableHeatingLessSpace');
+     return;
+  } 
+  setBoilerRoomSize(item);
   // set into the state
-  store.setCurrentView('heatingRoomHeight');
+  setCurrentView('heatingRoomHeight');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     How large is the usable area for the heating system in your boiler room?
   </p>
   <img :src="FlurplanSvg" alt="Building type image" style="width: 500px;" />

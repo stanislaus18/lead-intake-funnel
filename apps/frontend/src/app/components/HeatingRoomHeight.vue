@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
+import { setCurrentView, setInstallationLocationCeilingHeight } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FlurhoheSVG from '@/assets/Flurhohe.avif';
 
-const router = useRouter();
-
 const store = useLeadStore();
 
-const items = ['niedrig als 180cm', '180cm', 'hoher als 199cm'];
+const items = ['niedrig als 180cm', '180-199cm', 'hoher als 199cm'];
 
-function selectType(item: string) {
+function selectHeight(item: string) {
+  setInstallationLocationCeilingHeight(item);
+  if(item === 'niedrig als 180cm') {
+     setCurrentView('notApplicableHeatingLessHeight');
+     return;
+  }
   // set into the state
-  store.setCurrentView('heatingRoomWidth');
+  setCurrentView('heatingRoomWidth');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Welche Höhe hat dein Heizungsraum?
   </p>
 <img :src="FlurhoheSVG" alt="Building type image" style="width: 500px;" />
   <div class="list-container">
-    <div class="list-item" v-for="item in items" :key="item" @click="selectType(item)">
-      {{ item  }}
+    <div class="list-item" v-for="item in items" :key="item" @click="selectHeight(item)">
+      {{ item }}
     </div>
   </div>
 </template>

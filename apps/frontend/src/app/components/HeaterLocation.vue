@@ -1,27 +1,30 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { setHeatingLocation, setCurrentView } from './../composables';
 
 const store = useLeadStore();
 
-const items = ['Keller', 'Erdgeschoss', 'Obergeschoss', 'Dachgeschoss'];
+  const items = [{label: 'Keller', value: 'Im Keller'}, {label: 'Erdgeschoss', value: 'Im EG'}, {label: 'Obergeschoss', value: 'Obergeschoss'}, {label: 'Dachgeschoss', value: 'Dachgeschoss'}];
 
 function selectUnit(item: string) {
   // set into the state
-  store.setResidentialUnit(item);
-  store.setCurrentView('heatingRoomFloor');
+  if(item.label === 'Obergeschoss' || item.label === 'Dachgeschoss') {
+     setHeatingLocation(item.value);
+    setCurrentView('notApplicableHeatingLocation');
+    return;
+  }
+  setHeatingLocation(item.value);
+  setCurrentView('heatingRoomFloor');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Auf welcher Etage befindet sich dein derzeitiger Heizungsraum?
   </p>
   <div class="list-container">
-    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
-      {{ item }}
+    <div class="list-item" v-for="item in items" :key="item.label" @click="selectUnit(item)">
+      {{ item.label }}
     </div>
   </div>
 </template>

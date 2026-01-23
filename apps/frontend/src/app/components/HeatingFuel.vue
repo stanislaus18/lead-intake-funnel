@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
+import { setCurrentView, setHeatingFuel } from './../composables';
 const store = useLeadStore();
 
 const items = ['Erdgas', 'Öl', 'Fernwärme', 'Pelletheizung', 'Sonstige'];
 
 function selectGasType(item: string) {
+  setHeatingFuel(item);
+  if(item === 'Erdgas' || item === 'Sonstige') {
+    setCurrentView('HeatingConsumptionkwh');
+  } else if(item === 'Öl' || item === 'Fernwärme') {
+    setCurrentView('HeatingConsumptionLiter');
+  } else if(item === 'Pelletheizung') {
+    setCurrentView('HeatingConsumptionKilogram');
+  }
   // set into the state
-  store.setCurrentView('heatingConsumption');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Womit heizt du aktuell?
     Bitte wähle eine Option
   </p>

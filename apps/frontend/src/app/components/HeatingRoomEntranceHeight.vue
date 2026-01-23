@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
+import { setCurrentView, setHeightPathway } from './../composables';
 import { useRouter } from 'vue-router';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FloorhohelengthSVG from '@/assets/Floorhohelength.avif';
@@ -10,23 +11,32 @@ const store = useLeadStore();
 
 const items = ['Ja', 'Nein'];
 
-function selectType(item: string) {
+function selectAnswer(item: string) {
+  setHeightPathway(item);
+  if (item === 'Nein') {
+    setCurrentView('notApplicableHeatingLessWidth');
+    return;
+  }
   // set into the state
-  store.setCurrentView('listedBuilding');
+  setCurrentView('listedBuilding');
 }
 </script>
 
 <template>
-  <p>
+  <p class="title">
     Ist der Laufweg zu deinem Heizungsraum an jeder Stelle mindestens 180cm
     hoch?
   </p>
   <div class="list-container">
-    <img :src="FloorhohelengthSVG" alt="Building type image" style="width: 500px" />
+    <img
+      :src="FloorhohelengthSVG"
+      alt="Building type image"
+      style="width: 200px; height: 120px"
+    />
     <p>
-      Wichtig: Zur Installation der neuen Heizungsanlage und insbesondere der
-      neuen Komponenten wie den Wasserspeichern benötigen wir einen Laufweg mit
-      einer durchgehenden Höhe von mindestens 180cm.
+      <b>Wichtig:</b> Zur Installation der neuen Heizungsanlage und insbesondere
+      der neuen Komponenten wie den Wasserspeichern benötigen wir einen Laufweg
+      mit einer durchgehenden Höhe von mindestens 180cm.
     </p>
   </div>
   <div class="list-container">
@@ -34,7 +44,7 @@ function selectType(item: string) {
       class="list-item"
       v-for="item in items"
       :key="item"
-      @click="selectType(item)"
+      @click="selectAnswer(item)"
     >
       {{ item }}
     </div>
@@ -43,6 +53,7 @@ function selectType(item: string) {
 
 <style scoped>
 .list-container {
+  place-content: center;
   width: 600px;
   margin: 40px auto; /* center horizontally */
   display: flex;
@@ -50,7 +61,7 @@ function selectType(item: string) {
 }
 
 .list-item {
-  padding: 16px 20px;
+  padding: 16px 70px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #fff;

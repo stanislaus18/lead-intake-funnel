@@ -7,12 +7,6 @@ export const useLeadStore = defineStore('lead', {
     routeList: ['buildingType'],
   }),
   actions: {
-    setBuildingType(immoType: string) {
-      this.lead = { ...this.lead, buildingInformation: { immoType } };
-    },
-    setResidentialUnit(residentialUnits: number) {
-      this.lead = { ...this.lead, buildingInformation: { ...this.lead.buildingInformation, residentialUnits } };
-    },
     setCurrentView(view: string) {
       this.currentView = view;
        this.routeList.push(view);
