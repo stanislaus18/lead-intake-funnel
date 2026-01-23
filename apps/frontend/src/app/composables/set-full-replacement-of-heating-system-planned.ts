@@ -7,7 +7,7 @@ export function setFullReplacementOfHeatingSystemPlanned(
 ) {
   store.lead = {
     ...store.lead,
-    building: {
+    project: {
       ...store.lead.project,
       fullReplacementOfHeatingSystemPlanned,
     },

@@ -1,4 +1,5 @@
 import { useLeadStore } from '../../stores/leadStore';
+import { apiService } from '../service';
 
 const store = useLeadStore();
 
@@ -12,5 +13,13 @@ export function setContactInformation(contactInformation: {
     ...store.lead,
     contact: { ...store.lead.contact, contactInformation: contactInformation },
   };
-  console.log('Lead Information', store.lead);
+  apiService.postLeadIntakeFunnel(store.lead).subscribe({
+    next: (data) => {
+      console.log('Lead Information', data);
+    },
+    error: (err) => {
+     // Handle error appropriately
+     console.error('Error posting lead intake funnel:', err);
+    },
+  });
 }

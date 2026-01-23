@@ -58,7 +58,7 @@ export class AppService {
       heightPathway,
     } = lead.building?.buildingInformation || {};
 
-    const { heatedAreaString, typeOfHeating } =
+    const { heatedArea, typeOfHeating } =
       lead.building?.energyRelevantInformation || {};
 
     const { timeline, fullReplacementOfHeatingSystemPlanned } =
@@ -78,7 +78,7 @@ export class AppService {
       consumption &&
       consumptionUnit &&
       systemType &&
-      heatedAreaString &&
+      heatedArea &&
       typeOfHeating
     ) {
       return true;

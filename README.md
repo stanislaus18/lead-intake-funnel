@@ -1,5 +1,39 @@
 # LeadIntakeFunnel
 
+## Generate api specs for Vue using the following command
+
+### Prerequisites
+- **Java JDK** must be installed on your system (download from [oracle.com](https://www.oracle.com/java/technologies/downloads/)) OR
+- **Docker** must be installed if using Docker approach
+
+### Option 1: Using OpenAPI Generator (requires Java)
+```sh
+npx @openapitools/openapi-generator-cli generate \
+  -i apps/backend/src/documentation/openapi.json \
+  -g typescript-axios \
+  -o apps/frontend/src/app/api-specs
+```
+
+### Option 2: Using Docker (no Java required)
+If you prefer Docker instead of installing Java:
+1. Create `openapitools.json` at project root:
+```json
+{
+  "generator-cli": {
+    "version": "7.19.0",
+    "useDocker": true
+  }
+}
+```
+
+2. Run the command:
+```sh
+npx @openapitools/openapi-generator-cli generate \
+  -i apps/backend/src/documentation/openapi.json \
+  -g typescript-axios \
+  -o apps/frontend/src/app/api-specs
+```
+
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
