@@ -20,15 +20,20 @@ const store = useLeadStore();
 /**
  * Lets add the offline and online mechnicsm here to notify service worker
  */
- fromEvent(window, 'online').pipe(mapTo(true)).subscribe(() => {
-   // Notify service worker to upload pending images
-   console.log('App is back online, notifying service worker to upload pending images.');
- });
+fromEvent(window, 'online').pipe(mapTo(true)).subscribe(() => {
+  // Notify service worker to upload pending images
+  console.log('App is back online, notifying service worker to upload pending images.');
+  navigator.serviceWorker.ready.then((registration: any) => {
+    registration.active.postMessage({
+      type: 'UPLOAD_IMAGES',
+    })
+  })
+});
 
-  fromEvent(window, 'offline').pipe(mapTo(true)).subscribe(() => {
-   // Notify service worker to upload pending images
-   console.log('App is offline');
- });
+fromEvent(window, 'offline').pipe(mapTo(true)).subscribe(() => {
+  // Notify service worker to upload pending images
+  console.log('App is offline');
+});
 
 const OtherBuildingTypes = defineAsyncComponent(defaultComponent);
 const childRef = ref(null);
@@ -67,7 +72,7 @@ const componentToShow = computed(() => {
         :src="ZurukSvg"
         alt="Zurück image"
       > Zurück
-    </button>     
+    </button>
     <button
       v-if="hasValidateMethod"
       class="btn"

@@ -19,3 +19,5 @@ export * from './set-household-income';
 export * from './set-installation-timeline';
 export * from './set-contact-information';
 export * from './set-full-replacement-of-heating-system-planned';
+export * from './get-set-not-applicable-details';
+export * from './get-not-applicable-text-based';

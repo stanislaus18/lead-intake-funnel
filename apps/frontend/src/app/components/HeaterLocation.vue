@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { setHeatingLocation, setCurrentView } from './../composables';
+import { setHeatingLocation, setCurrentView, setNotApplicableDetails } from './../composables';
 
 const store = useLeadStore();
 
-  const items = [{label: 'Keller', value: 'Im Keller'}, {label: 'Erdgeschoss', value: 'Im EG'}, {label: 'Obergeschoss', value: 'Obergeschoss'}, {label: 'Dachgeschoss', value: 'Dachgeschoss'}];
+const items = [{ label: 'Keller', value: 'Im Keller' }, { label: 'Erdgeschoss', value: 'Im EG' }, { label: 'Obergeschoss', value: 'Obergeschoss' }, { label: 'Dachgeschoss', value: 'Dachgeschoss' }];
 
-function selectUnit(item: string) {
+function selectUnit(item: { label: string; value: string }) {
   // set into the state
-  if(item.label === 'Obergeschoss' || item.label === 'Dachgeschoss') {
-     setHeatingLocation(item.value);
-    setCurrentView('notApplicableHeatingLocation');
+  if (item.label === 'Obergeschoss' || item.label === 'Dachgeschoss') {
+    setHeatingLocation(item.value);
+    setNotApplicableDetails('HeaterLocation');
+    setCurrentView('notApplicable');
     return;
   }
   setHeatingLocation(item.value);
@@ -23,7 +24,12 @@ function selectUnit(item: string) {
     Auf welcher Etage befindet sich dein derzeitiger Heizungsraum?
   </p>
   <div class="list-container">
-    <div class="list-item" v-for="item in items" :key="item.label" @click="selectUnit(item)">
+    <div
+      v-for="item in items"
+      :key="item.label"
+      class="list-item"
+      @click="selectUnit(item)"
+    >
       {{ item.label }}
     </div>
   </div>
@@ -32,7 +38,8 @@ function selectUnit(item: string) {
 <style scoped>
 .list-container {
   width: 600px;
-  margin: 40px auto; /* center horizontally */
+  margin: 40px auto;
+  /* center horizontally */
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -44,7 +51,7 @@ function selectUnit(item: string) {
   border-radius: 8px;
   background-color: #fff;
   cursor: pointer;
-  transition: 
+  transition:
     background-color 0.2s ease,
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -55,5 +62,4 @@ function selectUnit(item: string) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 </style>

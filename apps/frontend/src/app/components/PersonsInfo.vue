@@ -59,10 +59,7 @@ function useClicked(pictures: Pictures) {
     lastName: formData.value.lastName,
     email: formData.value.email,
     phone: formData.value.phone,
-    project: {
-      pictures
-    }
-  });
+  }, { pictures });
 }
 
 function handleImageChange(

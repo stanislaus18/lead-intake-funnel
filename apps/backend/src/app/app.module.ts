@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FilesService } from './file-upload-service';
 import { AppRepository } from './app.repository';
+import { LeadIntakeFunnel } from './entities/lead-intake-funnel.entity';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { AppRepository } from './app.repository';
       database: process.env.MONGO_DB,
       synchronize: true, // ⚠️ Only for dev; auto creates schema
       // useUnifiedTopology: true,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [LeadIntakeFunnel],
     }),
+    TypeOrmModule.forFeature([LeadIntakeFunnel]),
   ],
   controllers: [AppController],
   providers: [AppService, FilesService, AppRepository],

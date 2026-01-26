@@ -20,19 +20,21 @@ export interface Project {
 
 const store = useLeadStore();
 
-export function setContactInformation(contactInformation: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  project: Project;
-}) {
+export function setContactInformation(
+  contactInformation: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone?: string;
+  },
+  project: Project,
+) {
   store.lead = {
     ...store.lead,
     contact: { ...store.lead.contact, contactInformation: contactInformation },
     project: {
       ...store.lead.project,
-      pictures: contactInformation.project.pictures,
+      pictures: project.pictures,
     },
   };
   apiService.postLeadIntakeFunnel(store.lead).subscribe({

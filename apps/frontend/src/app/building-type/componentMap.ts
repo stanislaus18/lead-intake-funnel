@@ -8,33 +8,58 @@ const path = './../components/';
 
 export const componentMap: Record<string, Component> = {
   buildingType: defineAsyncComponent(() => import(`${path}BuildingType.vue`)),
-  residentialUnit: defineAsyncComponent(() => import(`${path}ResidentialUnit.vue`)),
+  residentialUnit: defineAsyncComponent(
+    () => import(`${path}ResidentialUnit.vue`),
+  ),
   apartment: defineAsyncComponent(() => import(`${path}Apartment.vue`)),
   ownUse: defineAsyncComponent(() => import(`${path}OwnUse.vue`)),
-  replaceCurrentSystem: defineAsyncComponent(() => import(`${path}ReplaceCurrentSystem.vue`)),
-  heatingDetails: defineAsyncComponent(() => import(`${path}HeatingDetails.vue`)),
+  replaceCurrentSystem: defineAsyncComponent(
+    () => import(`${path}ReplaceCurrentSystem.vue`),
+  ),
+  heatingDetails: defineAsyncComponent(
+    () => import(`${path}HeatingDetails.vue`),
+  ),
   noOfPerson: defineAsyncComponent(() => import(`${path}NoOfPerson.vue`)),
   heatingFuel: defineAsyncComponent(() => import(`${path}HeatingFuel.vue`)),
   heatingYears: defineAsyncComponent(() => import(`${path}HeatingYears.vue`)),
-  heatingTypeForRoom: defineAsyncComponent(() => import(`${path}HeatingTypeForRoom.vue`)),
-  underFloorHeating: defineAsyncComponent(() => import(`${path}UnderFloorHeating.vue`)),
-  heaterLocation: defineAsyncComponent(() => import(`${path}HeaterLocation.vue`)),
-  heatingRoomFloor: defineAsyncComponent(() => import(`${path}HeatingRoomFloor.vue`)),
-  heatingRoomHeight: defineAsyncComponent(() => import(`${path}HeatingRoomHeight.vue`)),
-  heatingRoomWidth: defineAsyncComponent(() => import(`${path}HeatingRoomWidth.vue`)),
-  heatingRoomEntranceHeight: defineAsyncComponent(() => import(`${path}HeatingRoomEntranceHeight.vue`)),
-  listedBuilding: defineAsyncComponent(() => import(`${path}ListedBuilding.vue`)),
-  householdIncome: defineAsyncComponent(() => import(`${path}HouseholdIncome.vue`)),
+  heatingTypeForRoom: defineAsyncComponent(
+    () => import(`${path}HeatingTypeForRoom.vue`),
+  ),
+  underFloorHeating: defineAsyncComponent(
+    () => import(`${path}UnderFloorHeating.vue`),
+  ),
+  heaterLocation: defineAsyncComponent(
+    () => import(`${path}HeaterLocation.vue`),
+  ),
+  heatingRoomFloor: defineAsyncComponent(
+    () => import(`${path}HeatingRoomFloor.vue`),
+  ),
+  heatingRoomHeight: defineAsyncComponent(
+    () => import(`${path}HeatingRoomHeight.vue`),
+  ),
+  heatingRoomWidth: defineAsyncComponent(
+    () => import(`${path}HeatingRoomWidth.vue`),
+  ),
+  heatingRoomEntranceHeight: defineAsyncComponent(
+    () => import(`${path}HeatingRoomEntranceHeight.vue`),
+  ),
+  listedBuilding: defineAsyncComponent(
+    () => import(`${path}ListedBuilding.vue`),
+  ),
+  householdIncome: defineAsyncComponent(
+    () => import(`${path}HouseholdIncome.vue`),
+  ),
   installation: defineAsyncComponent(() => import(`${path}Installation.vue`)),
-  HeatingConsumptionKilogram: defineAsyncComponent(() => import(`${path}HeatingConsumptionKilogram.vue`)),
-  HeatingConsumptionkwh: defineAsyncComponent(() => import(`${path}HeatingConsumptionkwh.vue`)),
-  HeatingConsumptionLiter: defineAsyncComponent(() => import(`${path}HeatingConsumptionLiter.vue`)),
-  notApplicableHeating: defineAsyncComponent(() => import(`${path}NotApplicableHeating.vue`)),
-  notApplicableHeatingLocation: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLocation.vue`)),
-  notApplicableHeatingLessSpace: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessSpace.vue`)),
-  notApplicableHeatingLessHeight: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessHeight.vue`)),
-  notApplicableHeatingLessWidth: defineAsyncComponent(() => import(`${path}NotApplicableHeatingLessWidth.vue`)),
-  notApplicableHeatingHeritage: defineAsyncComponent(() => import(`${path}NotApplicableHeatingHeritage.vue`)),
+  HeatingConsumptionKilogram: defineAsyncComponent(
+    () => import(`${path}HeatingConsumptionKilogram.vue`),
+  ),
+  HeatingConsumptionkwh: defineAsyncComponent(
+    () => import(`${path}HeatingConsumptionkwh.vue`),
+  ),
+  HeatingConsumptionLiter: defineAsyncComponent(
+    () => import(`${path}HeatingConsumptionLiter.vue`),
+  ),
+  notApplicable: defineAsyncComponent(() => import(`${path}NotApplicable.vue`)),
   personsInfo: defineAsyncComponent(() => import(`${path}PersonsInfo.vue`)),
 };
 

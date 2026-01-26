@@ -9,7 +9,9 @@ const getDbPath = () => {
 
 export const AppDataSource = new DataSource({
   type: 'mongodb',
-  url: process.env.MONGO_URI || 'mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin',
+  url:
+    process.env.MONGO_URI ||
+    'mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin',
   synchronize: false,
   logging: true,
   migrations: [path.join(getDbPath(), '/**/*.{ts,js}')],

@@ -3,9 +3,9 @@ import { setPersonsHousehold, setCurrentView } from './../composables';
 
 const items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-function selectUnit(item: number) {
+function selectNoOfPersons(item: number) {
   // set into the state
-  setPersonsHousehold(item);
+  setPersonsHousehold(item.toString());
   setCurrentView('heatingFuel');
 }
 </script>
@@ -18,10 +18,10 @@ function selectUnit(item: number) {
   </p>
   <div class="list-container">
     <div
-      class="list-item"
       v-for="item in items"
       :key="item"
-      @click="selectUnit(item)"
+      class="list-item"
+      @click="selectNoOfPersons(item)"
     >
       {{ item === 9 ? 'Mehr als 8' : item }}
     </div>

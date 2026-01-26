@@ -1,53 +1,364 @@
-# LeadIntakeFunnel
+# Lead Intake Funnel
 
-`
-navigator.serviceWorker.ready.then(registration => {
-  registration.active.postMessage({
-    type: 'UPLOAD_IMAGES',
-    foo: 'bar'
-  })
-})
-`
+A modern web application for managing lead intake and qualification in the renewable energy sector. The application features a Vue.js frontend, NestJS backend, MongoDB database, and offline-first capabilities with IndexedDB and Service Workers.
 
-## Generate api specs for Vue using the following command
+## Table of Contents
 
-### Prerequisites
-- **Java JDK** must be installed on your system (download from [oracle.com](https://www.oracle.com/java/technologies/downloads/)) OR
-- **Docker** must be installed if using Docker approach
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Development](#development)
+- [Building](#building)
+- [Testing](#testing)
+- [API Documentation](#api-documentation)
+- [Database](#database)
+- [File Upload](#file-upload)
+- [Service Worker](#service-worker)
 
-### Option 1: Using OpenAPI Generator (requires Java)
-```sh
-npx @openapitools/openapi-generator-cli generate \
-  -i apps/backend/src/documentation/openapi.json \
-  -g typescript-axios \
-  -o apps/frontend/src/app/api-specs
+## Features
+
+- **Lead Management**: Create, track, and qualify leads through a structured intake funnel
+- **Multi-step Form**: User-friendly form with multiple sections for collecting lead information
+- **Image Upload**: Support for multiple image uploads (profile photos, building photos, heating system photos, etc.)
+- **Offline-First**: Works offline with IndexedDB for local storage
+- **Background Sync**: Automatic image upload via Service Worker when connection is available
+- **Real-time Validation**: Client-side and server-side validation
+- **MongoDB Integration**: Persistent storage with MongoDB
+- **Responsive Design**: Mobile-friendly interface with Tailwind CSS
+- **API Documentation**: Auto-generated Swagger documentation
+
+## Tech Stack
+
+### Frontend
+- **Vue 3** - Progressive JavaScript framework
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **RxJS** - Reactive programming library
+- **idb** - IndexedDB wrapper for offline storage
+
+### Backend
+- **NestJS** - Progressive Node.js framework
+- **TypeORM** - ORM for database operations
+- **MongoDB** - NoSQL database
+- **Express** - Web server framework
+- **Multer** - File upload middleware
+
+### Tools & Libraries
+- **Nx** - Monorepo management
+- **Playwright** - E2E testing
+- **Jest** - Unit testing
+- **ESLint** - Code linting
+- **OpenAPI** - API documentation
+
+## Project Structure
+
+```
+lead-intake-funnel/
+├── apps/
+│   ├── backend/                    # NestJS API server
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── app.controller.ts      # API endpoints
+│   │   │   │   ├── app.service.ts         # Business logic
+│   │   │   │   ├── app.repository.ts      # Database operations
+│   │   │   │   ├── entities/              # TypeORM entities
+│   │   │   │   ├── dto/                   # Data transfer objects
+│   │   │   │   └── file-upload-service.ts # File upload logic
+│   │   │   └── main.ts
+│   │   ├── jest.config.ts
+│   │   └── tsconfig.json
+│   ├── backend-e2e/                # E2E tests for backend
+│   ├── frontend/                   # Vue.js application
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── components/     # Vue components
+│   │   │   │   ├── composables/    # Vue composables
+│   │   │   │   ├── utility/        # Utility functions
+│   │   │   │   ├── router/         # Vue Router setup
+│   │   │   │   └── stores/         # State management
+│   │   │   └── main.ts
+│   │   ├── public/
+│   │   │   └── sw.js              # Service Worker
+│   │   └── vite.config.ts
+│   └── frontend-e2e/              # E2E tests for frontend
+├── migrations/                     # Database migrations
+├── docker-compose.yml
+├── Dockerfile
+├── nx.json
+└── package.json
 ```
 
-### Option 2: Using Docker (no Java required)
-If you prefer Docker instead of installing Java:
-1. Create `openapitools.json` at project root:
+## Prerequisites
+
+- **Node.js** >= 18.x
+- **pnpm** >= 8.x (or npm/yarn)
+- **MongoDB** >= 5.x
+- **Docker** (optional, for MongoDB)
+- **Java JDK** (optional, for OpenAPI generator)
+
+## Installation
+
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd lead-intake-funnel
+```
+
+### 2. Install dependencies
+```bash
+pnpm install
+```
+
+### 3. Set up environment variables
+
+Create `.env` file in the root directory:
+```env
+MONGO_DB=lead_intake_funnel
+NODE_ENV=development
+```
+
+### 4. Start MongoDB
+
+**Option A: Using Docker Compose**
+```bash
+docker-compose up -d
+```
+
+**Option B: Local MongoDB**
+Ensure MongoDB is running locally on `mongodb://localhost:27017`
+
+## Development
+
+### Start both frontend and backend
+
+```bash
+pnpm dev
+```
+
+Or start them individually:
+
+**Frontend (Vue.js on port 4200)**
+```bash
+pnpm frontend
+```
+
+**Backend (NestJS on port 3000)**
+```bash
+pnpm backend
+```
+
+### Watch mode for backend
+```bash
+pnpm nx build backend --watch
+```
+
+## Building
+
+### Build frontend
+```bash
+pnpm nx build frontend
+```
+
+### Build backend
+```bash
+pnpm nx build backend
+```
+
+### Build both
+```bash
+pnpm build
+```
+
+## Testing
+
+### Run backend tests
+```bash
+pnpm nx test backend
+```
+
+### Run frontend tests
+```bash
+pnpm nx test frontend
+```
+
+### Run E2E tests
+```bash
+pnpm nx e2e backend-e2e
+pnpm nx e2e frontend-e2e
+```
+
+### Run tests in watch mode
+```bash
+pnpm nx test backend --watch
+```
+
+## API Documentation
+
+### View Swagger UI
+Start the backend and visit: `http://localhost:3000/api/docs`
+
+## Database
+
+### MongoDB Setup
+
+**Connection String**
+```
+mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin
+```
+
+**Default Credentials**
+- Username: `root`
+- Password: `root`
+
+### Collections
+
+- **leads** - Main lead records with all intake information
+  - Stores contact information, building details, heating systems
+  - Includes uploaded file references
+
+### Running Migrations
+
+```bash
+pnpm nx run backend:migration:run
+```
+
+## File Upload
+
+### How it works
+
+1. **Frontend**: User uploads images in PersonsInfo component
+2. **IndexedDB**: Images are stored locally in IndexedDB
+3. **Service Worker**: Background sync triggers when online
+4. **Backend**: Images are uploaded to the server via `/api/lead-intake-funnel/upload`
+5. **MongoDB**: File references are stored in lead records
+
+### Upload Endpoint
+
+**POST** `/api/lead-intake-funnel/upload`
+
+**Request (FormData)**
+```
+- id: string (database record ID)
+- file: File (binary file data)
+```
+
+**Response**
 ```json
 {
-  "generator-cli": {
-    "version": "7.19.0",
-    "useDocker": true
-  }
+  "message": "File uploaded successfully",
+  "id": "abc123..."
 }
 ```
 
-2. Run the command:
-```sh
-npx @openapitools/openapi-generator-cli generate \
-  -i apps/backend/src/documentation/openapi.json \
-  -g typescript-axios \
-  -o apps/frontend/src/app/api-specs
+## Service Worker
+
+### Features
+
+- Offline image storage
+- Background sync using Background Sync API
+- Automatic retry on connection restore
+- Message-based communication with frontend
+
+### Manual Upload Trigger
+
+```javascript
+navigator.serviceWorker.ready.then(registration => {
+  registration.active.postMessage({
+    type: 'UPLOAD_IMAGES'
+  });
+});
 ```
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+### Background Sync Registration
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+The Service Worker automatically registers a background sync tag `'upload-images'` when images need uploading.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Repository Pattern
+
+The repository pattern is used for all database operations:
+
+```typescript
+// In app.repository.ts
+- createLead(leadData): Promise<any>
+- findLeadById(id: string): Promise<any>
+- findAllLeads(): Promise<any[]>
+- updateLead(id: string, leadData): Promise<any>
+- deleteLead(id: string): Promise<boolean>
+- findLeadsByEmail(email: string): Promise<any[]>
+- findLeadsByPostcode(postcode: string): Promise<any[]>
+- addFileToLead(leadId: string, fileId: string, fileType: string): Promise<any>
+- getLeadFiles(leadId: string): Promise<any[]>
+```
+
+## Key Components
+
+### PersonsInfo.vue
+Main form component that collects lead information and handles image uploads. Features:
+- Multi-field form validation
+- Image upload with preview
+- Real-time error feedback
+- IndexedDB integration
+
+### ImageUpload.vue
+Reusable child component for image uploads:
+- Multiple file selection
+- Image previews in grid layout
+- Individual remove functionality
+- Upload state management
+
+### UploadDBService
+IndexedDB service for offline storage:
+- Image saving and retrieval
+- Offline queue management
+- Sync status tracking
+
+## Debugging
+
+### Enable debug logs
+Set `DEBUG=*` environment variable:
+```bash
+DEBUG=* pnpm dev
+```
+
+### Check IndexedDB
+Open browser DevTools → Application → IndexedDB → offline-db
+
+### Monitor Service Worker
+DevTools → Application → Service Workers
+
+## Common Issues & Solutions
+
+### MongoDB Connection Error
+- Ensure MongoDB is running: `docker-compose up -d`
+- Check connection string in `app.module.ts`
+
+### Image Upload Fails
+- Check Service Worker registration
+- Verify backend API endpoint is accessible
+- Check browser console for errors
+
+### TypeORM Entity Not Found
+- Ensure entity is imported in `app.module.ts`
+- Verify entity file location and naming
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Run tests: `pnpm test`
+4. Commit with clear messages
+5. Submit pull request
+
+## License
+
+Proprietary - Vamo Energy
+
+## Support
+
+For issues and questions, contact the development team.
 
 ## Run tasks
 
@@ -142,3 +453,12 @@ And join the Nx community:
 - [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+`
+navigator.serviceWorker.ready.then(registration => {
+  registration.active.postMessage({
+    type: 'UPLOAD_IMAGES',
+    foo: 'bar'
+  })
+})
+`

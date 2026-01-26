@@ -4,28 +4,43 @@ import NoSvg from '@/assets/No.svg';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import YesSvg from '@/assets/Yes.svg';
 
-import { setCurrentView, setFullReplacementOfHeatingSystemPlanned } from './../composables';
+import { setCurrentView, setFullReplacementOfHeatingSystemPlanned, setNotApplicableDetails } from './../composables';
 
 function onClicked(answer: string) {
   setFullReplacementOfHeatingSystemPlanned(answer);
   if (answer === 'yes') {
     setCurrentView('heatingDetails');
   } else {
-    setCurrentView('notApplicableHeating');
+    setNotApplicableDetails('ReplaceCurrentSystem');
+    setCurrentView('notApplicable');
   }
 }
 </script>
 
 <template>
-  <p class="title">Soll die aktuelle Heizungsanlage komplett ersetzt werden?</p>
+  <p class="title">
+    Soll die aktuelle Heizungsanlage komplett ersetzt werden?
+  </p>
   <div class="list-container">
     <div class="button-container">
-      <button class="box btn-item" @click="onClicked('yes')">
-        <img :src="YesSvg" alt="Building type image" />
+      <button
+        class="box btn-item"
+        @click="onClicked('yes')"
+      >
+        <img
+          :src="YesSvg"
+          alt="Building type image"
+        >
         <p>Ja</p>
       </button>
-      <button class="box btn-item" @click="onClicked('no')">
-        <img :src="NoSvg" alt="Building type image" />
+      <button
+        class="box btn-item"
+        @click="onClicked('no')"
+      >
+        <img
+          :src="NoSvg"
+          alt="Building type image"
+        >
         <p>Nein</p>
       </button>
     </div>

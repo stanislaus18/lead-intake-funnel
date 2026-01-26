@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLeadStore } from './../../stores/leadStore';
-import { setCurrentView, setHeightPathway } from './../composables';
+import { setCurrentView, setHeightPathway, setNotApplicableDetails } from './../composables';
 import { useRouter } from 'vue-router';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FloorhohelengthSVG from '@/assets/Floorhohelength.avif';
@@ -14,7 +14,8 @@ const items = ['Ja', 'Nein'];
 function selectAnswer(item: string) {
   setHeightPathway(item);
   if (item === 'Nein') {
-    setCurrentView('notApplicableHeatingLessWidth');
+    setNotApplicableDetails('HeatingRoomEntranceHeight');
+    setCurrentView('notApplicable');
     return;
   }
   // set into the state
@@ -32,7 +33,7 @@ function selectAnswer(item: string) {
       :src="FloorhohelengthSVG"
       alt="Building type image"
       style="width: 200px; height: 120px"
-    />
+    >
     <p>
       <b>Wichtig:</b> Zur Installation der neuen Heizungsanlage und insbesondere
       der neuen Komponenten wie den Wasserspeichern benötigen wir einen Laufweg
@@ -41,9 +42,9 @@ function selectAnswer(item: string) {
   </div>
   <div class="list-container">
     <div
-      class="list-item"
       v-for="item in items"
       :key="item"
+      class="list-item"
       @click="selectAnswer(item)"
     >
       {{ item }}
