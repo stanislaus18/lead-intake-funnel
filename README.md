@@ -1,5 +1,14 @@
 # LeadIntakeFunnel
 
+`
+navigator.serviceWorker.ready.then(registration => {
+  registration.active.postMessage({
+    type: 'UPLOAD_IMAGES',
+    foo: 'bar'
+  })
+})
+`
+
 ## Generate api specs for Vue using the following command
 
 ### Prerequisites

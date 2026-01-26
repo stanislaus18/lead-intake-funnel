@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { AppRepository } from './app.repository';
+
 import { LeadIntakeFunnelDto } from './dto/lead-intake-funnel.dto';
 import { LeadStageEnum } from './types/enums';
 
 @Injectable()
 export class AppService {
-  validateLead(lead: LeadIntakeFunnelDto): {
+  constructor(private appRepository: AppRepository) {}
+
+  async validateLead(lead: LeadIntakeFunnelDto): Promise<{
     leadStage: LeadStageEnum;
     dataAcquisitionLink: string;
     appointmentBookingLink: string;
-  } | null {
+  } | null> {
     // lets default to qualification stage
     let response = null;
 
@@ -27,7 +31,7 @@ export class AppService {
         };
       }
 
-      if(this.isSelling(lead)) {
+      if (this.isSelling(lead)) {
         response = {
           leadStage: LeadStageEnum.SELLING,
           dataAcquisitionLink: 'https://www.vamo-energy.com/rechner...',
@@ -36,7 +40,13 @@ export class AppService {
       }
     }
 
-    return response;
+    try {
+      await this.appRepository.createLead(lead);
+      return response;
+    } catch (error) {
+      console.error('Error saving lead:', error);
+      throw error;
+    }
   }
 
   isQualified(lead: LeadIntakeFunnelDto): boolean {
@@ -145,9 +155,9 @@ export class AppService {
       domesticHotWaterCirculationPump !== undefined &&
       domestic_water_station !== undefined;
 
-      if (!isHeatingSystemComplete) {
-        return false;
-      }
+    if (!isHeatingSystemComplete) {
+      return false;
+    }
 
     const {
       householdIncome,

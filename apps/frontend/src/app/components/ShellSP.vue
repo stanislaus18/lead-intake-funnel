@@ -34,7 +34,7 @@ const OtherBuildingTypes = defineAsyncComponent(defaultComponent);
 const childRef = ref(null);
 
 const hasValidateMethod = computed(() => {
-  return typeof childRef.value?.validateAndNextPage === 'function';
+  return typeof (childRef.value as any)?.validateAndNextPage === 'function';
 });
 
 const hideBackButton = computed(() => {
@@ -43,7 +43,7 @@ const hideBackButton = computed(() => {
 
 function triggerChild() {
   if (hasValidateMethod.value) {
-    childRef.value.validateAndNextPage();
+    (childRef.value as any).validateAndNextPage();
   }
 }
 
@@ -54,20 +54,29 @@ const componentToShow = computed(() => {
 
 <template>
   <div class="building-type-container">
-    <component ref="childRef" :is="componentToShow" />
+    <component
+      :is="componentToShow"
+      ref="childRef"
+    />
     <button
       v-if="store.routeList.length > 1 && !hideBackButton"
       class="btn"
       @click="store.removeRouteFormList()"
     >
-      <img :src="ZurukSvg" alt="Zurück image" /> Zurück
+      <img
+        :src="ZurukSvg"
+        alt="Zurück image"
+      > Zurück
     </button>     
     <button
       v-if="hasValidateMethod"
       class="btn"
       @click="triggerChild"
     >
-     <img :src="VorwartSvg" alt="Weiter image" /> Weiter
+      <img
+        :src="VorwartSvg"
+        alt="Weiter image"
+      > Weiter
     </button>
   </div>
 </template>

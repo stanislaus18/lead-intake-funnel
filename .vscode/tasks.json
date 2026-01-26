@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build:backend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "nx", "build", "backend"],
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "serve:backend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "nx", "serve", "backend"],
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*starting server.*",
+          "endsPattern": "^.*listening on.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "watch:backend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "nx", "build", "backend", "--watch"],
+      "isBackground": true,
+      "problemMatcher": ["$tsc-watch"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "test:backend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "nx", "test", "backend"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}

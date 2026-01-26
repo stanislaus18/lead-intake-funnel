@@ -31,6 +31,20 @@
           "LeadIntakeFunnel"
         ]
       }
+    },
+    "/api/lead-intake-funnel/upload": {
+      "post": {
+        "operationId": "AppController_uploadFile",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "LeadIntakeFunnel"
+        ]
+      }
     }
   },
   "info": {

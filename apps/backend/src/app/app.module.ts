@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FilesService } from './file-upload-service';
+import { AppRepository } from './app.repository';
 
 @Module({
   imports: [
@@ -16,6 +18,6 @@ import { AppService } from './app.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FilesService, AppRepository],
 })
 export class AppModule {}

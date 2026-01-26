@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { setCurrentView, setContactInformation } from './../composables';
+import { Project, setContactInformation } from './../composables';
+import { UploadDBService } from './../utility/index-db';
+import ImageUpload from './ImageUpload.vue';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import VamoPng from '@/assets/VamoLogo.png';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import YesSvg from '@/assets/Yes.svg';
+import { Pictures } from '../composables/set-contact-information';
+import { combineLatest, Observable, of } from 'rxjs';
+
+const uploadDB = new UploadDBService();
+uploadDB.init$().subscribe();
 
 const formData = ref({
   salutation: '',
@@ -13,6 +18,12 @@ const formData = ref({
   postCode: '',
   email: '',
   phone: '',
+  outdoorUnitLocation: [] as File[],
+  outdoorUnitLocationWithArea: [] as File[],
+  heatingRoom: [] as File[],
+  meterClosetWithDoorOpen: [] as File[],
+  meterClosetSlsSwitchDetailed: [] as File[],
+  floorHeatingDistributionWithDoorOpen: [] as File[],
 });
 
 const errors = ref({
@@ -24,13 +35,85 @@ const errors = ref({
   phone: false,
 });
 
-function useClicked(answer: string) {
+const imagePreviews = ref<{
+  outdoorUnitLocation: { file: File; preview: string }[],
+  outdoorUnitLocationWithArea: { file: File; preview: string }[],
+  heatingRoom: { file: File; preview: string }[],
+  meterClosetWithDoorOpen: { file: File; preview: string }[],
+  meterClosetSlsSwitchDetailed: { file: File; preview: string }[],
+  floorHeatingDistributionWithDoorOpen: { file: File; preview: string }[],
+}>({
+  outdoorUnitLocation: [],
+  outdoorUnitLocationWithArea: [],
+  heatingRoom: [],
+  meterClosetWithDoorOpen: [],
+  meterClosetSlsSwitchDetailed: [],
+  floorHeatingDistributionWithDoorOpen: []
+});
+
+const isUploadingImage = ref(false);
+
+function useClicked(pictures: Pictures) {
   setContactInformation({
     firstName: formData.value.firstName,
     lastName: formData.value.lastName,
     email: formData.value.email,
     phone: formData.value.phone,
+    project: {
+      pictures
+    }
   });
+}
+
+function handleImageChange(
+  event: Event,
+  imagefiles: File[],
+  imageType: string = 'outdoorUnitLocation',
+) {
+  const target = event.target as HTMLInputElement;
+  const files = target.files;
+  if (files && files.length > 0) {
+    Array.from(files).forEach((file) => {
+      // Check if file already exists
+      if (
+        !(formData.value as any)[imageType].some((f: File) => f.name === file.name && f.size === file.size)
+      ) {
+        (formData.value as any)[imageType].push(file);
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          (imagePreviews.value as any)[imageType].push({
+            file,
+            preview: e.target?.result as string,
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    // Clear the input so the same file can be added again
+    target.value = '';
+  }
+}
+
+function removeImage(index: number, imageType: string = 'outdoorUnitLocation') {
+  const removedFile = (imagePreviews.value as any)[imageType][index].file;
+  (imagePreviews.value as any)[imageType].splice(index, 1);
+  (formData.value as any)[imageType] =
+    (formData.value as any)[imageType].filter(
+      (f: File) => !(f.name === removedFile.name && f.size === removedFile.size),
+    );
+}
+
+function uploadImages(imageType: string = 'outdoorUnitLocation'): Observable<IDBValidKey>[] {
+  if ((formData.value as any)[imageType].length === 0) {
+    return of([]) as any;
+  }
+
+  isUploadingImage.value = true;
+  const uploads: Observable<IDBValidKey>[] = (formData.value as any)[imageType].map((image: File) => uploadDB.saveImage$(image));
+  console.log('Starting upload for', uploads);
+  return uploads;
 }
 
 function handleSubmit() {
@@ -41,7 +124,7 @@ function handleSubmit() {
     lastName: false,
     postCode: false,
     email: false,
-    phone: false,
+    phone: false
   };
 
   let isValid = true;
@@ -79,33 +162,80 @@ function handleSubmit() {
 
   // Save form data and proceed only if valid
   if (isValid) {
-    useClicked('yes');
+    combineLatest([
+      combineLatest(uploadImages('outdoorUnitLocation')),
+      combineLatest(uploadImages('outdoorUnitLocationWithArea')),
+      combineLatest(uploadImages('heatingRoom')),
+      combineLatest(uploadImages('meterClosetWithDoorOpen')),
+      combineLatest(uploadImages('meterClosetSlsSwitchDetailed')),
+      combineLatest(uploadImages('floorHeatingDistributionWithDoorOpen'))
+    ]).subscribe({
+      next: ([
+        outdoorUnitLocation,
+        outdoorUnitLocationWithArea,
+        heatingRoom,
+        meterClosetWithDoorOpen,
+        meterClosetSlsSwitchDetailed,
+        floorHeatingDistributionWithDoorOpen
+      ]) => {
+        const pictures: Pictures = {
+          outdoorUnitLocation: outdoorUnitLocation?.map(id => ({ url: `${id}` })) || [],
+          outdoorUnitLocationWithArea: outdoorUnitLocationWithArea?.map(id => ({ url: `${id}` })) || [],
+          heatingRoom: heatingRoom?.map(id => ({ url: `${id}` })) || [],
+          meterClosetWithDoorOpen: meterClosetWithDoorOpen?.map(id => ({ url: `${id}` })) || [],
+          meterClosetSlsSwitchDetailed: meterClosetSlsSwitchDetailed?.map(id => ({ url: `${id}` })) || [],
+          floorHeatingDistributionWithDoorOpen: floorHeatingDistributionWithDoorOpen?.map(id => ({ url: `${id}` })) || []
+        };
+        useClicked(pictures);
+        console.log('All images uploaded successfully');
+      },
+      error: (err: Error) => {
+        console.error('Error uploading images:', err);
+        isUploadingImage.value = false;
+      },
+      complete: () => {
+        isUploadingImage.value = false;
+      }
+    });
   }
 }
 </script>
 
 <template>
   <div class="button-container">
-    <img :src="VamoPng" alt="Vamo Logo" />
+    <img
+      :src="VamoPng"
+      alt="Vamo Logo"
+    >
     <p class="headline">
       Jetzt Machbarkeitsprüfung abschließen! Als nächstes ermitteln wir
       gemeinsam die Details deines Angebots.
     </p>
-    <!-- Line 1: Salutation Dropdown -->
     <div class="form-row full-width">
       <select
         v-model="formData.salutation"
         :class="['form-select', { 'input-error': errors.salutation }]"
       >
-        <option value="">Bitte wählen</option>
-        <option value="Herr">Herr</option>
-        <option value="Frau">Frau</option>
-        <option value="Divers">Divers</option>
+        <option value="">
+          Bitte wählen
+        </option>
+        <option value="Herr">
+          Herr
+        </option>
+        <option value="Frau">
+          Frau
+        </option>
+        <option value="Divers">
+          Divers
+        </option>
       </select>
-      <p v-if="errors.salutation" class="error-message">Dieses Feld ist erforderlich</p>
+      <p
+        v-if="errors.salutation"
+        class="error-message"
+      >
+        Dieses Feld ist erforderlich
+      </p>
     </div>
-
-    <!-- Line 2: Vorname, Nachname, Postleitzahl -->
     <div class="form-row">
       <div class="input-wrapper">
         <input
@@ -113,8 +243,13 @@ function handleSubmit() {
           type="text"
           placeholder="Vorname"
           :class="['form-input', { 'input-error': errors.firstName }]"
-        />
-        <p v-if="errors.firstName" class="error-message">Erforderlich</p>
+        >
+        <p
+          v-if="errors.firstName"
+          class="error-message"
+        >
+          Erforderlich
+        </p>
       </div>
       <div class="input-wrapper">
         <input
@@ -122,8 +257,13 @@ function handleSubmit() {
           type="text"
           placeholder="Nachname"
           :class="['form-input', { 'input-error': errors.lastName }]"
-        />
-        <p v-if="errors.lastName" class="error-message">Erforderlich</p>
+        >
+        <p
+          v-if="errors.lastName"
+          class="error-message"
+        >
+          Erforderlich
+        </p>
       </div>
       <div class="input-wrapper">
         <input
@@ -131,12 +271,16 @@ function handleSubmit() {
           type="text"
           placeholder="Postleitzahl"
           :class="['form-input', { 'input-error': errors.postCode }]"
-        />
-        <p v-if="errors.postCode" class="error-message">Erforderlich</p>
+        >
+        <p
+          v-if="errors.postCode"
+          class="error-message"
+        >
+          Erforderlich
+        </p>
       </div>
     </div>
 
-    <!-- Line 3: Email and Telefon -->
     <div class="form-row">
       <div class="input-wrapper">
         <input
@@ -144,8 +288,13 @@ function handleSubmit() {
           type="email"
           placeholder="Email"
           :class="['form-input', { 'input-error': errors.email }]"
-        />
-        <p v-if="errors.email" class="error-message">Erforderlich</p>
+        >
+        <p
+          v-if="errors.email"
+          class="error-message"
+        >
+          Erforderlich
+        </p>
       </div>
       <div class="input-wrapper">
         <input
@@ -153,15 +302,109 @@ function handleSubmit() {
           type="tel"
           placeholder="Telefon"
           :class="['form-input', { 'input-error': errors.phone }]"
-        />
-        <p v-if="errors.phone" class="error-message">Erforderlich</p>
+        >
+        <p
+          v-if="errors.phone"
+          class="error-message"
+        >
+          Erforderlich
+        </p>
       </div>
     </div>
 
-    <!-- Button -->
+    <h3>Weitere Details</h3>
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="outdoorUnitLocation"
+        label="Profilfoto hochladen"
+        :image-previews="imagePreviews['outdoorUnitLocation']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'outdoorUnitLocation')
+        "
+        @image-remove="(index) => removeImage(index, 'outdoorUnitLocation')"
+      />
+    </div>
+
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="outdoorUnitLocationWithArea"
+        label="Profilfoto hochladen"
+        :image-previews="imagePreviews['outdoorUnitLocationWithArea']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'outdoorUnitLocationWithArea')
+        "
+        @image-remove="(index) => removeImage(index, 'outdoorUnitLocationWithArea')"
+      />
+    </div>
+
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="heatingRoom"
+        label="Heizungsraum"
+        :image-previews="imagePreviews['heatingRoom']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'heatingRoom')
+        "
+        @image-remove="(index) => removeImage(index, 'heatingRoom')"
+      />
+    </div>
+
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="meterClosetWithDoorOpen"
+        label="Zählerschrank mit offener Tür"
+        :image-previews="imagePreviews['meterClosetWithDoorOpen']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'meterClosetWithDoorOpen')
+        "
+        @image-remove="(index) => removeImage(index, 'meterClosetWithDoorOpen')"
+      />
+    </div>
+
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="meterClosetSlsSwitchDetailed"
+        label="Zählerschrank mit SLS-Schalter (detailliert)"
+        :image-previews="imagePreviews['meterClosetSlsSwitchDetailed']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'meterClosetSlsSwitchDetailed')
+        "
+        @image-remove="(index) => removeImage(index, 'meterClosetSlsSwitchDetailed')"
+      />
+    </div>
+
+    <div class="form-row full-width">
+      <ImageUpload
+        image-type="floorHeatingDistributionWithDoorOpen"
+        label="Fußbodenheizungsverteilung mit offener Tür"
+        :image-previews="imagePreviews['floorHeatingDistributionWithDoorOpen']"
+        :is-uploading="isUploadingImage"
+        @image-change="
+          (event, files) =>
+            handleImageChange(event, [], 'floorHeatingDistributionWithDoorOpen')
+        "
+        @image-remove="(index) => removeImage(index, 'floorHeatingDistributionWithDoorOpen')"
+      />
+    </div>
+
     <div class="form-row button-row">
-      <button @click="handleSubmit" class="btn-submit">
-        Jetzt Angebot Berechnen
+      <button
+        class="btn-submit"
+        @click="handleSubmit"
+      >
+        {{
+          isUploadingImage ? 'Wird hochgeladen...' : 'Jetzt Angebot Berechnen'
+        }}
       </button>
     </div>
   </div>
@@ -267,5 +510,10 @@ function handleSubmit() {
 .btn-item {
   width: 280px;
   border-radius: 10px;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>
