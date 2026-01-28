@@ -1,0 +1,5 @@
+{
+  "migrationsDirectory": "./migrations",
+  "changelogCollectionName": "lead-intake-funnel-migrations",
+  "mongoUri": "mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin"
+}

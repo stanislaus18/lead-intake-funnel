@@ -1,21 +1,5 @@
-export * from './immo-type.enum';
 export * from './yes-no.enum';
-export * from './boiler-room-size.enum';
-export * from './ceiling-height.enum';
-export * from './rooms-between-heating.enum';
-export * from './location.enum';
-export * from './grounding-type.enum';
-export * from './salutation.enum';
-export * from './heating-type.enum';
-export * from './heating-location.enum';
-export * from './consumption-unit.enum';
-export * from './heating-system-type.enum';
-export * from './domestic-hot-water-pump.enum';
-export * from './domestic-water-station.enum';
-export * from './shower-type.enum';
+
 export * from './ownership-type.enum';
-export * from './ownership-category.enum';
-export * from './timeline.enum';
-export * from './foundation-status.enum';
-export * from './disposal-type.enum';
+
 export * from './lead-stage.enum';

@@ -15,7 +15,7 @@ const formData = ref({
   salutation: '',
   firstName: '',
   lastName: '',
-  postCode: '',
+  postalcode: '',
   email: '',
   phone: '',
   outdoorUnitLocation: [] as File[],
@@ -30,7 +30,7 @@ const errors = ref({
   salutation: false,
   firstName: false,
   lastName: false,
-  postCode: false,
+  postalcode: false,
   email: false,
   phone: false,
 });
@@ -119,7 +119,7 @@ function handleSubmit() {
     salutation: false,
     firstName: false,
     lastName: false,
-    postCode: false,
+    postalcode: false,
     email: false,
     phone: false
   };
@@ -142,8 +142,8 @@ function handleSubmit() {
     isValid = false;
   }
 
-  if (!formData.value.postCode) {
-    errors.value.postCode = true;
+  if (!formData.value.postalcode) {
+    errors.value.postalcode = true;
     isValid = false;
   }
 
@@ -264,13 +264,13 @@ function handleSubmit() {
       </div>
       <div class="input-wrapper">
         <input
-          v-model="formData.postCode"
+          v-model="formData.postalcode"
           type="text"
           placeholder="Postleitzahl"
-          :class="['form-input', { 'input-error': errors.postCode }]"
+          :class="['form-input', { 'input-error': errors.postalcode }]"
         >
         <p
-          v-if="errors.postCode"
+          v-if="errors.postalcode"
           class="error-message"
         >
           Erforderlich

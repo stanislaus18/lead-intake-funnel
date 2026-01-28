@@ -287,8 +287,6 @@ The repository pattern is used for all database operations:
 - findAllLeads(): Promise<any[]>
 - updateLead(id: string, leadData): Promise<any>
 - deleteLead(id: string): Promise<boolean>
-- findLeadsByEmail(email: string): Promise<any[]>
-- findLeadsByPostcode(postcode: string): Promise<any[]>
 - addFileToLead(leadId: string, fileId: string, fileType: string): Promise<any>
 - getLeadFiles(leadId: string): Promise<any[]>
 ```

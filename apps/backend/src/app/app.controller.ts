@@ -8,23 +8,34 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { MarketingDto } from './dto/marketing.dto';
-import { AddressDto } from './dto/address.dto';
-import { ContactInformationDto } from './dto/contact-information.dto';
-import { ContactDto } from './dto/contact.dto';
-import { LeadIntakeFunnelDto } from './dto/lead-intake-funnel.dto';
 import { ApiExtraModels, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LeadResponseDto } from './dto/lead-response.dto';
 import { FilesService } from './file-upload-service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Express from 'express';
+import { CreateLeadIntakeFunnelDto } from './modules/lead-intake-funnel/dto';
+import { Observable } from 'rxjs';
+import { BuildingDto } from './modules/building/dto';
+import { ContactDto } from './modules/contact/dto';
+import { AddressDto } from './modules/address/dto';
+import { ContactInformationDto } from './modules/contact-information/dto';
+import { MarketingDto } from './modules/marketing/dto';
+import { BuildingInformationDto } from './modules/building-information/dto';
+import { OwnershipRelationshipsDto } from './modules/ownership-relationships/dto';
+import { EnergyRelevantInformationDto } from './modules/energy-relevant-information/dto';
+import { HotWaterDto } from './modules/hot-water/dto';
 
 @ApiExtraModels(
+  LeadResponseDto,
+  BuildingDto,
   ContactDto,
-  ContactInformationDto,
   AddressDto,
+  ContactInformationDto,
   MarketingDto,
-  LeadIntakeFunnelDto,
+  BuildingInformationDto,
+  OwnershipRelationshipsDto,
+  EnergyRelevantInformationDto,
+  HotWaterDto,
 )
 @ApiTags('LeadIntakeFunnel')
 @Controller('lead-intake-funnel')
@@ -36,24 +47,16 @@ export class AppController {
 
   @Post()
   @ApiOkResponse({ type: LeadResponseDto })
-  async postLeadData(
-    @Body() leadIntakeFunnelDto: LeadIntakeFunnelDto,
-  ): Promise<LeadResponseDto> {
-    let response;
-    console.log('leadIntakeFunnelDto', leadIntakeFunnelDto);
+  postLeadData(
+    @Body() createLeadIntakeFunnelDto: CreateLeadIntakeFunnelDto,
+  ): Observable<LeadResponseDto> {
+    console.log('leadIntakeFunnelDto', createLeadIntakeFunnelDto);
 
     try {
-      response = await this.appService.validateLead(leadIntakeFunnelDto);
-
-      console.log('Response from service:', response);
-      if (!response) {
-        throw new HttpException('Lead validation failed', 400);
-      }
+      return this.appService.validateLead(createLeadIntakeFunnelDto);
     } catch {
       throw new HttpException('Lead validation failed', 424);
     }
-
-    return LeadResponseDto.create(response);
   }
 
   @Post('upload')

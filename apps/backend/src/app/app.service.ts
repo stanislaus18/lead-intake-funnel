@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { AppRepository } from './app.repository';
 
-import { LeadIntakeFunnelDto } from './dto/lead-intake-funnel.dto';
 import { LeadStageEnum } from './types/enums';
+import { CreateLeadIntakeFunnelDto } from './modules/lead-intake-funnel/dto';
+import { LeadIntakeFunnelService } from './modules/lead-intake-funnel/lead-intake-funnel.service';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Injectable()
 export class AppService {
-  constructor(private appRepository: AppRepository) {}
+  constructor(private leadIntakeFunnelService: LeadIntakeFunnelService) {}
 
-  async validateLead(lead: LeadIntakeFunnelDto): Promise<{
+  validateLead(lead: CreateLeadIntakeFunnelDto): Observable<{
     leadStage: LeadStageEnum;
     dataAcquisitionLink: string;
     appointmentBookingLink: string;
@@ -41,17 +42,18 @@ export class AppService {
     }
 
     try {
-      await this.appRepository.createLead(lead);
-      return response;
+      return this.leadIntakeFunnelService
+        .create(lead)
+        .pipe(switchMap(() => of(response)));
     } catch (error) {
       console.error('Error saving lead:', error);
       throw error;
     }
   }
 
-  isQualified(lead: LeadIntakeFunnelDto): boolean {
+  isQualified(lead: CreateLeadIntakeFunnelDto): boolean {
     const { firstName, lastName, email, phone } =
-      lead.contact.contactInformation;
+      lead.contact?.contactInformation || {};
 
     if (firstName && lastName && email && phone) {
       return true;
@@ -59,7 +61,7 @@ export class AppService {
     return false;
   }
 
-  isDiscoverable(lead: LeadIntakeFunnelDto): boolean {
+  isDiscoverable(lead: CreateLeadIntakeFunnelDto): boolean {
     const {
       residentialUnits,
       boilerRoomSize,
@@ -96,7 +98,7 @@ export class AppService {
     return false;
   }
 
-  isSelling(lead: LeadIntakeFunnelDto): boolean {
+  isSelling(lead: CreateLeadIntakeFunnelDto): boolean {
     const {
       constructionYear,
       livingSpace,

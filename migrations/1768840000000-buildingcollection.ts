@@ -47,9 +47,9 @@ export async function up(): Promise<void> {
                   bsonType: 'string',
                   description: "'city' must be a string",
                 },
-                postalCode: {
+                postalcode: {
                   bsonType: 'string',
-                  description: "'postalCode' must be a string",
+                  description: "'postalcode' must be a string",
                 },
                 countryCode: {
                   bsonType: 'string',
@@ -63,7 +63,7 @@ export async function up(): Promise<void> {
             },
             buildingInformation: {
               bsonType: 'object',
-              required: [],
+              required: ['id'],
               properties: {
                 id: {
                   bsonType: 'string',

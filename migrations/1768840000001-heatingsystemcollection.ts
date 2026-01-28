@@ -37,19 +37,23 @@ export async function up(): Promise<void> {
             },
             consumptionUnit: {
               bsonType: 'string',
-              description: "'consumptionUnit' must be Liter (l) or Kilowattstunden (kWh)",
+              description:
+                "'consumptionUnit' must be Liter (l) or Kilowattstunden (kWh)",
             },
             systemType: {
               bsonType: 'string',
-              description: "'systemType' must be a string with heating system type",
+              description:
+                "'systemType' must be a string with heating system type",
             },
             constructionYearHeatingSystem: {
               bsonType: 'int',
-              description: "'constructionYearHeatingSystem' must be an integer greater than 1500",
+              description:
+                "'constructionYearHeatingSystem' must be an integer greater than 1500",
             },
             constructionYearHeatingSystemString: {
               bsonType: 'string',
-              description: "'constructionYearHeatingSystemString' must be a string",
+              description:
+                "'constructionYearHeatingSystemString' must be a string",
             },
             model: {
               bsonType: 'string',
@@ -57,7 +61,8 @@ export async function up(): Promise<void> {
             },
             floorHeatingConnectedToReturnPipe: {
               bsonType: 'bool',
-              description: "'floorHeatingConnectedToReturnPipe' must be a boolean",
+              description:
+                "'floorHeatingConnectedToReturnPipe' must be a boolean",
             },
             floorHeatingOwnHeatingCircuit: {
               bsonType: 'bool',
@@ -69,7 +74,8 @@ export async function up(): Promise<void> {
             },
             numberOfFloorHeatingDistributors: {
               bsonType: 'int',
-              description: "'numberOfFloorHeatingDistributors' must be an integer",
+              description:
+                "'numberOfFloorHeatingDistributors' must be an integer",
             },
             numberOfRadiators: {
               bsonType: 'int',
@@ -77,15 +83,17 @@ export async function up(): Promise<void> {
             },
             domesticHotWaterByHeatpump: {
               bsonType: 'bool',
-              description: "'domesticHotWaterByHeatpump' must be a boolean",
+              description: "'domesticHotWaterByHeatpump' must be a string",
             },
             domesticHotWaterCirculationPump: {
               bsonType: 'string',
-              description: "'domesticHotWaterCirculationPump' must be no, unknown, yes_but_inactive, or yes_and_active",
+              description:
+                "'domesticHotWaterCirculationPump' must be no, unknown, yes_but_inactive, or yes_and_active",
             },
             domestic_water_station: {
               bsonType: 'string',
-              description: "'domestic_water_station' must be no, unknown, yes, or water_filter_and_pressure_reducer",
+              description:
+                "'domestic_water_station' must be no, unknown, yes, or water_filter_and_pressure_reducer",
             },
             createdAt: {
               bsonType: 'date',
@@ -145,7 +153,9 @@ export async function down(): Promise<void> {
     );
 
     if (collectionExists) {
-      const count = await db.collection(HEATING_SYSTEM_COLLECTION).countDocuments();
+      const count = await db
+        .collection(HEATING_SYSTEM_COLLECTION)
+        .countDocuments();
       if (count === 0) {
         console.log(`Started reverting ${HEATING_SYSTEM_COLLECTION}`);
         await db.dropCollection(HEATING_SYSTEM_COLLECTION);

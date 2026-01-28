@@ -25,97 +25,24 @@ export async function up(): Promise<void> {
         $jsonSchema: {
           bsonType: 'object',
           title: 'Create Contact Object Validation',
-          required: ['id', 'contactInformation', 'createdAt'],
+          required: ['id', 'contactInformationId', 'createdAt'],
           properties: {
             id: {
               bsonType: 'string',
               description: "'id' must be a string and is required",
             },
-            contactInformation: {
-              bsonType: 'object',
-              required: [
-                'salutation',
-                'firstName',
-                'lastName',
-                'phone',
-                'email',
-                'newsletterSingleOptIn',
-              ],
-              properties: {
-                salutation: {
-                  bsonType: 'string',
-                  description:
-                    "'salutation' must be a string, will store Mann, FRAU, Divers",
-                },
-                firstName: {
-                  bsonType: 'string',
-                  description: "'firstName' must be a string",
-                },
-                lastName: {
-                  bsonType: 'string',
-                  description: "'lastName' must be a string",
-                },
-                phone: {
-                  bsonType: 'string',
-                  description: "'lastName' must be a string",
-                },
-                email: {
-                  bsonType: 'string',
-                  description: "'email' must be a string",
-                },
-                newsletterSingleOptIn: {
-                  bsonType: 'string',
-                  description: "'newsletterSingleOptIn' must be a string",
-                },
-              },
+            contactInformationId: {
+              bsonType: 'string',
+              description:
+                "'contactInformationId' must be a string and is required",
             },
-            address: {
-              bsonType: 'object',
-              required: ['id'],
-              properties: {
-                id: {
-                  bsonType: 'string',
-                  description: "'id' must be a string and is required",
-                },
-                street: {
-                  bsonType: 'string',
-                  description: "'street' must be a string",
-                },
-                city: {
-                  bsonType: 'string',
-                  description: "'firstName' must be a string",
-                },
-                postalCode: {
-                  bsonType: 'string',
-                  description: "'postalCode' must be a string",
-                },
-                countryCode: {
-                  bsonType: 'string',
-                  description: "'countryCode' must be a string",
-                },
-                addressAddition: {
-                  bsonType: 'string',
-                  description: "'addressAddition' must be a string",
-                },
-              },
+            addressId: {
+              bsonType: 'string',
+              description: "'addressId' must be a string",
             },
-            marketing: {
-              bsonType: 'object',
-              required: ['id'],
-              properties: {
-                id: {
-                  bsonType: 'string',
-                  description: "'id' must be a string and is required",
-                },
-                customerLoyaltyProgramType: {
-                  bsonType: 'string',
-                  description: "'customerLoyaltyProgramType' must be a string",
-                },
-                customerLoyaltyProgramId: {
-                  bsonType: 'string',
-                  description: "'customerLoyaltyProgramId' must be a string",
-                },
-              },
+            marketingId: {
+              bsonType: 'string',
+              description: "'marketingId' must be a string",
             },
             createdAt: {
               bsonType: 'date',
@@ -126,6 +53,7 @@ export async function up(): Promise<void> {
               description: "'updatedAt' must be a date",
             },
           },
+          additionalProperties: false,
         },
       },
     };

@@ -10,7 +10,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeadIntakeFunnelDto"
+                "$ref": "#/components/schemas/CreateLeadIntakeFunnelDto"
               }
             }
           }
@@ -68,9 +68,197 @@
       }
     },
     "schemas": {
+      "LeadResponseDto": {
+        "type": "object",
+        "properties": {
+          "leadStage": {
+            "type": "string",
+            "description": "Lead stage",
+            "enum": [
+              "qualification",
+              "discovery",
+              "selling"
+            ]
+          },
+          "dataAcquisitionLink": {
+            "type": "string",
+            "description": "Data acquistion link"
+          },
+          "appointmentBookingLink": {
+            "type": "string",
+            "description": "Appointment booking link"
+          }
+        },
+        "required": [
+          "leadStage",
+          "dataAcquisitionLink",
+          "appointmentBookingLink"
+        ]
+      },
+      "BuildingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Building id"
+          },
+          "version": {
+            "type": "string",
+            "description": "Building version"
+          },
+          "leadId": {
+            "type": "string",
+            "description": "Lead id"
+          },
+          "type": {
+            "type": "string",
+            "description": "Building type"
+          },
+          "addressId": {
+            "type": "string",
+            "description": "Address id"
+          },
+          "buildingInformationId": {
+            "type": "string",
+            "description": "Building information id"
+          },
+          "ownershipRelationshipsId": {
+            "type": "string",
+            "description": "Ownership relationships id"
+          },
+          "energyRelevantInformationId": {
+            "type": "string",
+            "description": "Energy relevant information id"
+          },
+          "hotWaterId": {
+            "type": "string",
+            "description": "Hot water id"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "leadId",
+          "type",
+          "addressId",
+          "buildingInformationId",
+          "ownershipRelationshipsId",
+          "energyRelevantInformationId",
+          "hotWaterId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Contact id"
+          },
+          "contactInformationId": {
+            "type": "string",
+            "description": "Contact information id"
+          },
+          "addressId": {
+            "type": "string",
+            "description": "Address id"
+          },
+          "marketingId": {
+            "type": "string",
+            "description": "Marketing id"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "contactInformationId",
+          "addressId",
+          "marketingId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Address id"
+          },
+          "street": {
+            "type": "string",
+            "description": "Street of an address"
+          },
+          "houseNumber": {
+            "type": "string",
+            "description": "House number"
+          },
+          "city": {
+            "type": "string",
+            "description": "City of an address"
+          },
+          "postalcode": {
+            "type": "string",
+            "description": "Postal code of an address"
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "ISO Country Code (e.g. \"DE\" for Germany)"
+          },
+          "addressAddition": {
+            "type": "string",
+            "description": "Additional address information (e.g. \"1. Etage\")"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "street",
+          "houseNumber",
+          "city",
+          "postalcode",
+          "countryCode",
+          "addressAddition",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
       "ContactInformationDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "Contact information id"
+          },
           "salutation": {
             "type": "object",
             "description": "Salutation"
@@ -95,71 +283,310 @@
             "type": "boolean",
             "description": "Newsletter single opt-in",
             "default": false
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
           }
         },
         "required": [
+          "id",
           "salutation",
           "firstName",
           "lastName",
           "phone",
           "email",
-          "newsletterSingleOptIn"
-        ]
-      },
-      "AddressDto": {
-        "type": "object",
-        "properties": {
-          "street": {
-            "type": "string",
-            "description": "Street of an address"
-          },
-          "city": {
-            "type": "string",
-            "description": "City of an address"
-          },
-          "postalCode": {
-            "type": "string",
-            "description": "Postal code of an address"
-          },
-          "countryCode": {
-            "type": "string",
-            "description": "Country code of an address"
-          },
-          "addressAddition": {
-            "type": "string",
-            "description": "Additional part of an address"
-          }
-        },
-        "required": [
-          "street",
-          "city",
-          "postalCode",
-          "countryCode",
-          "addressAddition"
+          "newsletterSingleOptIn",
+          "createdAt",
+          "updatedAt"
         ]
       },
       "MarketingDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "Marketing id"
+          },
           "customerLoyaltyProgramType": {
             "type": "string",
             "description": "Customer loyalty program type"
           },
           "customerLoyaltyProgramId": {
             "type": "string",
-            "description": "Customer loyalty program ID"
+            "description": "Customer loyalty program id"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
           }
         },
         "required": [
+          "id",
           "customerLoyaltyProgramType",
-          "customerLoyaltyProgramId"
+          "customerLoyaltyProgramId",
+          "createdAt",
+          "updatedAt"
         ]
       },
-      "ContactDto": {
+      "BuildingInformationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Building information id"
+          },
+          "immoType": {
+            "type": "object",
+            "description": "Recommended for qualification. Possible choices: Einfamilienhaus / Zweifamilienhaus, Doppelhaus / Reihenhaus, Wohnung, Gewerbe, Mehrfamilienhaus, Sonstiges"
+          },
+          "heritageProtection": {
+            "type": "object",
+            "description": "Heritage protection. Recommended for qualification. If the building has heritage Protection, possible values \"Ja\", \"Nein\""
+          },
+          "constructionYear": {
+            "type": "number",
+            "description": "Construction year (YYYY). Recommended for selling. Number"
+          },
+          "livingSpace": {
+            "type": "number",
+            "description": "Living space in square meters. Recommended for selling. The size in square meter of the living area (heated area is normally = or less than this number)"
+          },
+          "constructionYearString": {
+            "type": "string",
+            "description": "Construction year string. Recommended for selling. If the exact year is not known only a range"
+          },
+          "residentialUnits": {
+            "type": "number",
+            "description": "Residential units. Recommended for discovery. Number"
+          },
+          "boilerRoomSize": {
+            "type": "object",
+            "description": "Boiler room size. Optional, Recommended for discovery. Possible choices: \"weniger als 4qm\", \"mehr als 4 qm\""
+          },
+          "installationLocationCeilingHeight": {
+            "type": "object",
+            "description": "Installation location ceiling height. Optional, Recommended for discovery. Possible choices: \"niedriger als 180 cm\", \"180 - 199 cm\", \"höher als 199 cm\""
+          },
+          "widthPathway": {
+            "type": "object",
+            "description": "Width pathway. Optional, Recommended for discovery. Possible choices: \"Ja\", \"Nein\""
+          },
+          "heightPathway": {
+            "type": "object",
+            "description": "Height pathway. Optional, Recommended for discovery. Possible choices: \"Ja\", \"Nein\""
+          },
+          "roomsBetweenHeatingRoomAndOutdoorUnit": {
+            "type": "object",
+            "description": "Rooms between heating room and outdoor unit. Optional, Recommended for selling. Possible choices: \"no_room\", \"one_room\", \"two_rooms_or_more\""
+          },
+          "meterClosetLocation": {
+            "type": "object",
+            "description": "Meter closet location. Optional, Recommended for selling. Possible choices: \"Keller\", \"Ergeschoss\", \"Obergeschoss\", \"Dachgeschoss\""
+          },
+          "electricityConnectionLocation": {
+            "type": "object",
+            "description": "Electricity connection location. Optional, Recommended for selling. Possible choices: \"Keller\", \"Ergeschoss\", \"Obergeschoss\", \"Dachgeschoss\""
+          },
+          "groundingType": {
+            "type": "object",
+            "description": "Grounding type. Recommended for selling. Possible choices: \"water_or_gas_pipe\", \"grounding_spike_or_foundation\", \"no_grounding\", \"unknown\""
+          },
+          "hasSolarThermalSystem": {
+            "type": "boolean",
+            "description": "Has solar thermal system. Recommended for selling. Boolean: true, false"
+          },
+          "personsHousehold": {
+            "type": "number",
+            "description": "Persons in household. Recommended for selling. Number of people in the household"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "immoType",
+          "heritageProtection",
+          "constructionYear",
+          "livingSpace",
+          "constructionYearString",
+          "residentialUnits",
+          "boilerRoomSize",
+          "installationLocationCeilingHeight",
+          "widthPathway",
+          "heightPathway",
+          "roomsBetweenHeatingRoomAndOutdoorUnit",
+          "meterClosetLocation",
+          "electricityConnectionLocation",
+          "groundingType",
+          "hasSolarThermalSystem",
+          "personsHousehold",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "OwnershipRelationshipsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Ownership relationships id"
+          },
+          "ownershipRelationship": {
+            "type": "string",
+            "description": "Ownership relationship. DEPRECATED Optional, empfohlen. Possible values: \"Eigentümer\", \"Teileigentümer\", \"Sonstiges\""
+          },
+          "ownershipRelationshipExplanation": {
+            "type": "string",
+            "description": "Ownership relationship explanation. DEPRECATED Required if ownershipRelationship is \"Teileigentümer\" or \"Sonstiges\""
+          },
+          "numberOfOwners": {
+            "type": "number",
+            "description": "Number of owners. DEPRECATED Required if ownershipRelationship is \"Teileigentümer\" or \"Sonstiges\". Number"
+          },
+          "ownerOccupiedHousing": {
+            "type": "boolean",
+            "description": "Owner occupied housing. Recommended for selling. Boolean: true, false"
+          },
+          "type": {
+            "type": "object",
+            "description": "Type of ownership. Recommended for selling. Possible values: \"one_owner\", \"two_owners\", \"community_of_owners\""
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "ownershipRelationship",
+          "ownershipRelationshipExplanation",
+          "numberOfOwners",
+          "ownerOccupiedHousing",
+          "type",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "EnergyRelevantInformationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Energy relevant information id"
+          },
+          "heatedArea": {
+            "type": "number",
+            "description": "Heated area. Optional, Recommended for qualification. Number"
+          },
+          "heatedAreaString": {
+            "type": "string",
+            "description": "Heated area string. Format: e.g. \"185 qm²\""
+          },
+          "typeOfHeating": {
+            "type": "object",
+            "description": "Type of heating. Optional, Recommended for discovery. Possible values: \"Heizkörper\", \"Fußbodenheizung\", \"Heizkörper + Fußbodenheizung\", \"Nachtspeicherofen\", \"Sonstiges\""
+          },
+          "locationHeating": {
+            "type": "object",
+            "description": "Location of heating system. Optional, Recommended for discovery. Possible values: \"Unterm Dach\", \"Im Keller\", \"Im EG\", \"1.OG\", \"Dachgeschoss\", \"Obergeschoss\", \"Keller\", \"Erdgeschoss\""
+          },
+          "apartmentHeatingSystem": {
+            "type": "object",
+            "description": "Apartment heating system. Required if immoType is \"Wohnung\". Possible values: \"Yes\", \"No\""
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "heatedArea",
+          "heatedAreaString",
+          "typeOfHeating",
+          "locationHeating",
+          "apartmentHeatingSystem",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "HotWaterDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Hot water id"
+          },
+          "numberOfBathtubs": {
+            "type": "number",
+            "description": "Number of bathtubs. Number"
+          },
+          "numberOfShowers": {
+            "type": "number",
+            "description": "Number of showers. Number"
+          },
+          "typeOfShowers": {
+            "type": "string",
+            "description": "Type of showers. Possible values: \"Duschkopf\", \"Raindance Duschkopf\", \"Wasserfall-Dusche\""
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "numberOfBathtubs",
+          "numberOfShowers",
+          "typeOfShowers",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateContactDto": {
         "type": "object",
         "properties": {
           "contactInformation": {
-            "description": "Contact information details",
+            "description": "Contact information",
             "allOf": [
               {
                 "$ref": "#/components/schemas/ContactInformationDto"
@@ -167,7 +594,7 @@
             ]
           },
           "address": {
-            "description": "Address information",
+            "description": "Address of contact person",
             "allOf": [
               {
                 "$ref": "#/components/schemas/AddressDto"
@@ -175,7 +602,7 @@
             ]
           },
           "marketing": {
-            "description": "Marketing information",
+            "description": "Marketing",
             "allOf": [
               {
                 "$ref": "#/components/schemas/MarketingDto"
@@ -201,280 +628,11 @@
           "updatedAt"
         ]
       },
-      "BuildingInformationDto": {
+      "CreateBuildingDto": {
         "type": "object",
         "properties": {
-          "immoType": {
-            "type": "string",
-            "description": "Type of property",
-            "enum": [
-              "Einfamilienhaus / Zweifamilienhaus",
-              "Doppelhaus / Reihenhaus",
-              "Wohnung",
-              "Gewerbe",
-              "Mehrfamilienhaus",
-              "Sonstiges"
-            ]
-          },
-          "heritageProtection": {
-            "type": "string",
-            "description": "Heritage protection status",
-            "enum": [
-              "Ja",
-              "Nein"
-            ]
-          },
-          "constructionYear": {
-            "type": "number",
-            "description": "Year of construction"
-          },
-          "livingSpace": {
-            "type": "number",
-            "description": "Living space in square meters"
-          },
-          "constructionYearString": {
-            "type": "string",
-            "description": "Construction year as string"
-          },
-          "residentialUnits": {
-            "type": "number",
-            "description": "Number of residential units"
-          },
-          "boilerRoomSize": {
-            "type": "string",
-            "description": "Size of boiler room",
-            "enum": [
-              "weniger als 4qm",
-              "mehr als 4 qm"
-            ]
-          },
-          "installationLocationCeilingHeight": {
-            "type": "string",
-            "description": "Ceiling height at installation location",
-            "enum": [
-              "niedriger als 180 cm",
-              "180 - 199 cm",
-              "höher als 199 cm"
-            ]
-          },
-          "widthPathway": {
-            "type": "string",
-            "description": "Width of pathway to outdoor unit",
-            "enum": [
-              "Ja",
-              "Nein"
-            ]
-          },
-          "heightPathway": {
-            "type": "string",
-            "description": "Height of pathway to outdoor unit",
-            "enum": [
-              "Ja",
-              "Nein"
-            ]
-          },
-          "roomsBetweenHeatingRoomAndOutdoorUnit": {
-            "type": "string",
-            "description": "Number of rooms between heating room and outdoor unit",
-            "enum": [
-              "no_room",
-              "one_room",
-              "two_rooms_or_more"
-            ]
-          },
-          "meterClosetLocation": {
-            "type": "string",
-            "description": "Location of meter closet",
-            "enum": [
-              "Keller",
-              "Ergeschoss",
-              "Obergeschoss",
-              "Dachgeschoss"
-            ]
-          },
-          "electricityConnectionLocation": {
-            "type": "string",
-            "description": "Location of electricity connection",
-            "enum": [
-              "Keller",
-              "Ergeschoss",
-              "Obergeschoss",
-              "Dachgeschoss"
-            ]
-          },
-          "groundingType": {
-            "type": "string",
-            "description": "Type of grounding",
-            "enum": [
-              "water_or_gas_pipe",
-              "grounding_spike_or_foundation",
-              "no_grounding",
-              "unknown"
-            ]
-          },
-          "hasSolarThermalSystem": {
-            "type": "boolean",
-            "description": "Has solar thermal system"
-          },
-          "personsHousehold": {
-            "type": "number",
-            "description": "Number of persons in household"
-          }
-        },
-        "required": [
-          "immoType",
-          "heritageProtection",
-          "constructionYear",
-          "livingSpace",
-          "constructionYearString",
-          "residentialUnits",
-          "boilerRoomSize",
-          "installationLocationCeilingHeight",
-          "widthPathway",
-          "heightPathway",
-          "roomsBetweenHeatingRoomAndOutdoorUnit",
-          "meterClosetLocation",
-          "electricityConnectionLocation",
-          "groundingType",
-          "hasSolarThermalSystem",
-          "personsHousehold"
-        ]
-      },
-      "OwnershipRelationshipsDto": {
-        "type": "object",
-        "properties": {
-          "ownershipRelationship": {
-            "type": "string",
-            "description": "Ownership relationship",
-            "enum": [
-              "Eigentümer",
-              "Teileigentümer",
-              "Sonstiges"
-            ]
-          },
-          "ownershipRelationshipExplanation": {
-            "type": "string",
-            "description": "Explanation of ownership relationship"
-          },
-          "numberOfOwners": {
-            "type": "number",
-            "description": "Number of owners"
-          },
-          "ownerOccupiedHousing": {
-            "type": "boolean",
-            "description": "Owner occupied housing"
-          },
-          "type": {
-            "type": "string",
-            "description": "Ownership category",
-            "enum": [
-              "one_owner",
-              "two_owners",
-              "community_of_owners"
-            ]
-          }
-        },
-        "required": [
-          "ownershipRelationship",
-          "ownershipRelationshipExplanation",
-          "numberOfOwners",
-          "ownerOccupiedHousing",
-          "type"
-        ]
-      },
-      "EnergyRelevantInformationDto": {
-        "type": "object",
-        "properties": {
-          "heatedArea": {
-            "type": "number",
-            "description": "Heated area in square meters"
-          },
-          "heatedAreaString": {
-            "type": "string",
-            "description": "Heated area as string"
-          },
-          "typeOfHeating": {
-            "type": "string",
-            "description": "Type of heating",
-            "enum": [
-              "Heizkörper",
-              "Fußbodenheizung",
-              "Heizkörper + Fußbodenheizung",
-              "Nachtspeicherofen",
-              "Sonstiges"
-            ]
-          },
-          "locationHeating": {
-            "type": "string",
-            "description": "Location of heating",
-            "enum": [
-              "Unterm Dach",
-              "Im Keller",
-              "Im EG",
-              "1.OG",
-              "Dachgeschoss",
-              "Obergeschoss",
-              "Keller",
-              "Erdgeschoss"
-            ]
-          },
-          "apartmentHeatingSystem": {
-            "type": "string",
-            "description": "Apartment heating system (Yes/No)"
-          }
-        },
-        "required": [
-          "heatedArea",
-          "heatedAreaString",
-          "typeOfHeating",
-          "locationHeating",
-          "apartmentHeatingSystem"
-        ]
-      },
-      "HotWaterDto": {
-        "type": "object",
-        "properties": {
-          "numberOfBathtubs": {
-            "type": "number",
-            "description": "Number of bathtubs"
-          },
-          "numberOfShowers": {
-            "type": "number",
-            "description": "Number of showers"
-          },
-          "typeOfShowers": {
-            "type": "string",
-            "description": "Type of showers",
-            "enum": [
-              "Duschkopf",
-              "Raindance Duschkopf",
-              "Wasserfall-Dusche"
-            ]
-          }
-        },
-        "required": [
-          "numberOfBathtubs",
-          "numberOfShowers",
-          "typeOfShowers"
-        ]
-      },
-      "BuildingDto": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string",
-            "description": "Version of the building data"
-          },
-          "leadId": {
-            "type": "string",
-            "description": "Lead ID associated with this building"
-          },
-          "type": {
-            "type": "string",
-            "description": "Type of building"
-          },
           "address": {
-            "description": "Address information",
+            "description": "Address of the Building where the Heat Pump is to be installed",
             "allOf": [
               {
                 "$ref": "#/components/schemas/AddressDto"
@@ -482,7 +640,7 @@
             ]
           },
           "buildingInformation": {
-            "description": "Building information details",
+            "description": "Building information",
             "allOf": [
               {
                 "$ref": "#/components/schemas/BuildingInformationDto"
@@ -490,7 +648,7 @@
             ]
           },
           "ownershipRelationships": {
-            "description": "Ownership relationships details",
+            "description": "Ownership relationships",
             "allOf": [
               {
                 "$ref": "#/components/schemas/OwnershipRelationshipsDto"
@@ -498,7 +656,7 @@
             ]
           },
           "energyRelevantInformation": {
-            "description": "Energy relevant information details",
+            "description": "Energy relevant information",
             "allOf": [
               {
                 "$ref": "#/components/schemas/EnergyRelevantInformationDto"
@@ -506,7 +664,7 @@
             ]
           },
           "hotWater": {
-            "description": "Hot water system details",
+            "description": "Hot water",
             "allOf": [
               {
                 "$ref": "#/components/schemas/HotWaterDto"
@@ -525,9 +683,6 @@
           }
         },
         "required": [
-          "version",
-          "leadId",
-          "type",
           "address",
           "buildingInformation",
           "ownershipRelationships",
@@ -537,47 +692,32 @@
           "updatedAt"
         ]
       },
-      "HeatingSystemDto": {
+      "CreateHeatingSystemDto": {
         "type": "object",
         "properties": {
           "consumption": {
             "type": "number",
-            "description": "Consumption amount"
+            "description": "Consumption"
           },
           "consumptionUnit": {
-            "type": "string",
-            "description": "Consumption unit",
-            "enum": [
-              "Liter (l)",
-              "Kilowattstunden (kWh)"
-            ]
+            "type": "object",
+            "description": "Consumption unit"
           },
           "systemType": {
-            "type": "string",
-            "description": "System type",
-            "enum": [
-              "Fernwärme",
-              "Gasetagenheizung",
-              "Kohle",
-              "Heizöl",
-              "Wärmepumpe",
-              "Erdgas",
-              "Flüssiggas",
-              "Pellet-/Holzheizung",
-              "Sonstiges"
-            ]
+            "type": "object",
+            "description": "System type"
           },
           "constructionYearHeatingSystem": {
             "type": "number",
-            "description": "Construction year of heating system"
+            "description": "Construction year heating system"
           },
           "constructionYearHeatingSystemString": {
             "type": "string",
-            "description": "Construction year as string"
+            "description": "Construction year heating system string"
           },
           "model": {
             "type": "string",
-            "description": "Heating system model"
+            "description": "Model"
           },
           "floorHeatingConnectedToReturnPipe": {
             "type": "boolean",
@@ -604,24 +744,22 @@
             "description": "Domestic hot water by heatpump"
           },
           "domesticHotWaterCirculationPump": {
-            "type": "string",
-            "description": "Domestic hot water circulation pump",
-            "enum": [
-              "no",
-              "unknown",
-              "yes_but_inactive",
-              "yes_and_active"
-            ]
+            "type": "object",
+            "description": "Domestic hot water circulation pump"
           },
           "domestic_water_station": {
+            "type": "object",
+            "description": "Domestic water station"
+          },
+          "createdAt": {
+            "format": "date-time",
             "type": "string",
-            "description": "Domestic water station",
-            "enum": [
-              "no",
-              "unknown",
-              "yes",
-              "water_filter_and_pressure_reducer"
-            ]
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
           }
         },
         "required": [
@@ -638,24 +776,47 @@
           "numberOfRadiators",
           "domesticHotWaterByHeatpump",
           "domesticHotWaterCirculationPump",
-          "domestic_water_station"
+          "domestic_water_station",
+          "createdAt",
+          "updatedAt"
         ]
       },
       "PictureUrlDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "Picture URL id"
+          },
           "url": {
             "type": "string",
-            "description": "URL to the picture"
+            "description": "URL"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
           }
         },
         "required": [
-          "url"
+          "id",
+          "url",
+          "createdAt",
+          "updatedAt"
         ]
       },
-      "PicturesDto": {
+      "CreatePicturesDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "Pictures id"
+          },
           "outdoorUnitLocation": {
             "description": "Outdoor unit location pictures",
             "type": "array",
@@ -697,47 +858,44 @@
             "items": {
               "$ref": "#/components/schemas/PictureUrlDto"
             }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
           }
         },
         "required": [
+          "id",
           "outdoorUnitLocation",
           "outdoorUnitLocationWithArea",
           "heatingRoom",
           "meterClosetWithDoorOpen",
           "meterClosetSlsSwitchDetailed",
-          "floorHeatingDistributionWithDoorOpen"
+          "floorHeatingDistributionWithDoorOpen",
+          "createdAt",
+          "updatedAt"
         ]
       },
-      "ProjectDto": {
+      "CreateProjectDto": {
         "type": "object",
         "properties": {
           "timeline": {
-            "type": "string",
-            "description": "Project timeline",
-            "enum": [
-              "Sofort",
-              "1-3 Monate",
-              "3-6 Monate",
-              ">6 Monate"
-            ]
+            "type": "object",
+            "description": "Project timeline"
           },
           "householdIncome": {
-            "type": "string",
-            "description": "Household income",
-            "enum": [
-              "more_than_40k_gross",
-              "less_than_40k_gross",
-              "no_answer"
-            ]
+            "type": "object",
+            "description": "Household income"
           },
           "statusOfFoundationConstruction": {
-            "type": "string",
-            "description": "Status of foundation construction",
-            "enum": [
-              "Vamo",
-              "Kunde",
-              "Kein Fundament notwendig"
-            ]
+            "type": "object",
+            "description": "Status of foundation construction"
           },
           "infosLeadsource": {
             "type": "string",
@@ -749,7 +907,7 @@
           },
           "additionalDisposal": {
             "type": "array",
-            "description": "Additional disposal options",
+            "description": "Additional disposal options. Possible values: oil_tank_plastic_up_to_5000l, oil_tank_plastic_more_than_5000l, oil_tank_steel_up_to_5000l, oil_tank_steel_more_than_5000l, heatpump, liquid_gas_tank",
             "items": {
               "type": "string",
               "enum": [
@@ -767,10 +925,10 @@
             "description": "Should keep solar thermal system"
           },
           "pictures": {
-            "description": "Project pictures",
+            "description": "Pictures ID reference",
             "allOf": [
               {
-                "$ref": "#/components/schemas/PicturesDto"
+                "$ref": "#/components/schemas/CreatePicturesDto"
               }
             ]
           }
@@ -786,44 +944,48 @@
           "pictures"
         ]
       },
-      "LeadIntakeFunnelDto": {
+      "CreateLeadIntakeFunnelDto": {
         "type": "object",
         "properties": {
           "version": {
             "type": "string",
-            "description": "Version of the lead intake funnel"
+            "description": "Version of the API"
           },
           "contact": {
-            "description": "Associated Contact",
+            "description": "Contact details to be updated",
             "allOf": [
               {
-                "$ref": "#/components/schemas/ContactDto"
+                "$ref": "#/components/schemas/CreateContactDto"
               }
             ]
           },
           "building": {
-            "description": "Associated building",
+            "description": "Building details to be updated",
             "allOf": [
               {
-                "$ref": "#/components/schemas/BuildingDto"
+                "$ref": "#/components/schemas/CreateBuildingDto"
               }
             ]
           },
           "heatingSystem": {
-            "description": "Associated heating system",
+            "description": "Heating system details to be updated",
             "allOf": [
               {
-                "$ref": "#/components/schemas/HeatingSystemDto"
+                "$ref": "#/components/schemas/CreateHeatingSystemDto"
               }
             ]
           },
           "project": {
-            "description": "Associated project",
+            "description": "Project details to be updated",
             "allOf": [
               {
-                "$ref": "#/components/schemas/ProjectDto"
+                "$ref": "#/components/schemas/CreateProjectDto"
               }
             ]
+          },
+          "leadResponseId": {
+            "type": "string",
+            "description": "Lead response id reference"
           },
           "createdAt": {
             "format": "date-time",
@@ -842,35 +1004,9 @@
           "building",
           "heatingSystem",
           "project",
+          "leadResponseId",
           "createdAt",
           "updatedAt"
-        ]
-      },
-      "LeadResponseDto": {
-        "type": "object",
-        "properties": {
-          "leadStage": {
-            "type": "string",
-            "description": "Lead stage",
-            "enum": [
-              "qualification",
-              "discovery",
-              "selling"
-            ]
-          },
-          "dataAcquisitionLink": {
-            "type": "string",
-            "description": "Data acquistion link"
-          },
-          "appointmentBookingLink": {
-            "type": "string",
-            "description": "Appointment booking link"
-          }
-        },
-        "required": [
-          "leadStage",
-          "dataAcquisitionLink",
-          "appointmentBookingLink"
         ]
       }
     }

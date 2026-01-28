@@ -12,7 +12,7 @@ export class AddressEntity {
   city: string;
 
   @Prop({ required: false })
-  postalCode: string;
+  postalcode: string;
 
   @Prop({ required: false })
   countryCode: string;
