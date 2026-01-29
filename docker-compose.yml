@@ -3,7 +3,7 @@ version: "3.9"
 services:
   mongo:
     image: mongo:7
-    container_name: mongo
+    container_name: lead-intake-mongo
     restart: always
     ports:
       - "27017:27017"
@@ -12,23 +12,64 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - lead-intake-network
 
-  api:
-    container_name: nest-api
+  backend:
+    container_name: lead-intake-backend
     build:
       context: .
       dockerfile: Dockerfile
+      target: backend
     command: pnpm backend
     ports:
       - "3000:3000"
     depends_on:
       - mongo
     environment:
-      MONGO_URI: mongodb://root:example@mongo:27017/mydb?authSource=admin
+      NODE_ENV: development
+      MONGO_URI: mongodb://root:root@mongo:27017/lead_intake_funnel?authSource=admin
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - lead-intake-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    container_name: lead-intake-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    command: pnpm frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    environment:
+      NODE_ENV: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - lead-intake-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   mongo_data:
     driver: local
+
+networks:
+  lead-intake-network:
+    driver: bridge

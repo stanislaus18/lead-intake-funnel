@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { useLeadStore } from './../../stores/leadStore';
 import { setCurrentView, setBoilerRoomSize, setNotApplicableDetails } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FlurplanSvg from '@/assets/Flurplan.avif';
 
-const store = useLeadStore();
 
-const items = ['Weniger als 4 qm', 'Mehr als 4 qm'];
+const items = ['weniger als 4 qm', 'mehr als 4 qm'];
 
 function selectType(item: string) {
-  if (item === 'Weniger als 4 qm') {
+  if (item === 'weniger als 4 qm') {
     setNotApplicableDetails('HeatingRoomFloor');
     setCurrentView('notApplicable');
     return;

@@ -3,12 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { GridFSBucket, ObjectId, Db, MongoClient } from 'mongodb';
 import { Readable } from 'stream';
 import * as Express from 'express';
+import { PictureUrlService } from './modules/picture-url/picture-url.service';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 
 @Injectable()
 export class FilesService {
   private gridFSBucket: GridFSBucket;
   private db: Db;
   private mongoClient: MongoClient;
+
+  constructor(private readonly pictureUrlService: PictureUrlService) {}
 
   async onModuleInit() {
     try {
@@ -58,7 +62,13 @@ export class FilesService {
           .on('error', (err) => {
             reject(err);
           })
-          .on('finish', () => {
+          .on('finish', async () => {
+            await this.updatePictureUrl(id).catch((error) => {
+              console.error(
+                '[FilesService] Error updating picture URL after upload:',
+                error,
+              );
+            });
             resolve({
               id: uploadStream.id,
               filename: file.originalname,
@@ -81,6 +91,16 @@ export class FilesService {
       return stream;
     } catch (error) {
       console.error('[FilesService] Download error:', error);
+      throw error;
+    }
+  }
+
+  async updatePictureUrl(id: string): Promise<void> {
+    // Placeholder for future implementation
+    try {
+      await firstValueFrom(this.pictureUrlService.update(id, `uploads/${id}`));
+    } catch (error) {
+      console.error('[FilesService] Update Picture URL error:', error);
       throw error;
     }
   }

@@ -90,11 +90,44 @@ export class BuildingService {
     );
   }
 
-  findById(id: string): Observable<BuildingDao> {
+  findById(id: string): Observable<any> {
     this.logger.log(`Finding building with ID: ${id}`);
 
     try {
-      return this.buildingRepository.findById(id);
+      return this.buildingRepository.findById(id).pipe(
+        switchMap((building) => {
+          return combineLatest([
+            this.addressService.findById(building.addressId),
+            this.buildingInformationService.findById(
+              building.buildingInformationId,
+            ),
+            this.ownershipRelationshipsService.findById(
+              building.ownershipRelationshipsId,
+            ),
+            this.energyRelevantInformationService.findById(
+              building.energyRelevantInformationId,
+            ),
+            this.hotWaterService.findById(building.hotWaterId),
+          ]);
+        }),
+        map(
+          ([
+            address,
+            buildingInformation,
+            ownershipRelationships,
+            energyRelevantInformation,
+            hotWater,
+          ]) => {
+            return {
+              address,
+              buildingInformation,
+              ownershipRelationships,
+              energyRelevantInformation,
+              hotWater,
+            };
+          },
+        ),
+      );
     } catch (error) {
       this.logger.error(`Failed to find building with ID: ${id}`, error);
       return of(null);

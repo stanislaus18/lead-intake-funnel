@@ -88,11 +88,26 @@ export class ContactService {
     }
   }
 
-  findById(id: string): Observable<ContactDao> {
+  findById(id: string): Observable<any> {
     this.logger.log(`Finding contact with ID: ${id}`);
 
     try {
-      return this.contactRepository.findById(id);
+      return this.contactRepository.findById(id).pipe(
+        switchMap((contactDao: ContactDao) => {
+          return combineLatest([
+            this.contactInformationService.findById(
+              contactDao.contactInformationId,
+            ),
+            this.addressService.findById(contactDao.addressId),
+          ]);
+        }),
+        map(([contactInformation, address]) => {
+          return {
+            contactInformation,
+            address,
+          };
+        }),
+      );
     } catch (error) {
       this.logger.error(`Failed to find contact with ID: ${id}`, error);
       return of(null);

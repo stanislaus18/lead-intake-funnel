@@ -25,42 +25,66 @@ export class PicturesService {
     this.logger.log(`Creating pictures with URL`);
 
     const outdoorUnitLocationPictureUrl =
-      createPicturesDto.outdoorUnitLocation.map((oul) =>
-        this.pictureUrlService.create(PictureUrlDto.from(oul)),
-      );
+      createPicturesDto.outdoorUnitLocation.length > 0
+        ? createPicturesDto.outdoorUnitLocation.map((oul) =>
+            this.pictureUrlService.create(PictureUrlDto.from(oul)),
+          )
+        : [of({ id: undefined })];
+
     const outdoorUnitLocationWithAreaPictureUrl =
-      createPicturesDto.outdoorUnitLocationWithArea.map((oulwa) =>
-        this.pictureUrlService.create(PictureUrlDto.from(oulwa)),
-      );
-    const heatingRoomPictureUrl = createPicturesDto.heatingRoom.map((hr) =>
-      this.pictureUrlService.create(PictureUrlDto.from(hr)),
-    );
+      createPicturesDto.outdoorUnitLocationWithArea.length > 0
+        ? createPicturesDto.outdoorUnitLocationWithArea.map((oulwa) =>
+            this.pictureUrlService.create(PictureUrlDto.from(oulwa)),
+          )
+        : [of({ id: undefined })];
+
+    const heatingRoomPictureUrl =
+      createPicturesDto.heatingRoom.length > 0
+        ? createPicturesDto.heatingRoom.map((hr) =>
+            this.pictureUrlService.create(PictureUrlDto.from(hr)),
+          )
+        : [of({ id: undefined })];
+
     const meterClosetWithDoorOpenPictureUrl =
-      createPicturesDto.meterClosetWithDoorOpen.map((mcwdo) =>
-        this.pictureUrlService.create(PictureUrlDto.from(mcwdo)),
-      );
+      createPicturesDto.meterClosetWithDoorOpen.length > 0
+        ? createPicturesDto.meterClosetWithDoorOpen.map((mcwdo) =>
+            this.pictureUrlService.create(PictureUrlDto.from(mcwdo)),
+          )
+        : [of({ id: undefined })];
+
     const meterClosetSlsSwitchDetailedPictureUrl =
-      createPicturesDto.meterClosetSlsSwitchDetailed.map((mcslsd) =>
-        this.pictureUrlService.create(PictureUrlDto.from(mcslsd)),
-      );
+      createPicturesDto.meterClosetSlsSwitchDetailed.length > 0
+        ? createPicturesDto.meterClosetSlsSwitchDetailed.map((mcslsd) =>
+            this.pictureUrlService.create(PictureUrlDto.from(mcslsd)),
+          )
+        : [of({ id: undefined })];
+
     const floorHeatingDistributionWithDoorOpenPictureUrl =
-      createPicturesDto.floorHeatingDistributionWithDoorOpen.map((fhdwdo) =>
-        this.pictureUrlService.create(PictureUrlDto.from(fhdwdo)),
-      );
+      createPicturesDto.floorHeatingDistributionWithDoorOpen.length > 0
+        ? createPicturesDto.floorHeatingDistributionWithDoorOpen.map((fhdwdo) =>
+            this.pictureUrlService.create(PictureUrlDto.from(fhdwdo)),
+          )
+        : [of({ id: undefined })];
 
     return forkJoin({
-      outdoorUnitLocation: forkJoin(outdoorUnitLocationPictureUrl),
+      outdoorUnitLocation: forkJoin(outdoorUnitLocationPictureUrl).pipe(
+        map((o) => o.filter((e) => e.id !== undefined)),
+      ),
       outdoorUnitLocationWithArea: forkJoin(
         outdoorUnitLocationWithAreaPictureUrl,
+      ).pipe(map((o) => o.filter((e) => e.id !== undefined))),
+      heatingRoom: forkJoin(heatingRoomPictureUrl).pipe(
+        map((o) => o.filter((e) => e.id !== undefined)),
       ),
-      heatingRoom: forkJoin(heatingRoomPictureUrl),
-      meterClosetWithDoorOpen: forkJoin(meterClosetWithDoorOpenPictureUrl),
+      meterClosetWithDoorOpen: forkJoin(meterClosetWithDoorOpenPictureUrl).pipe(
+        map((o) => o.filter((e) => e.id !== undefined)),
+      ),
       meterClosetSlsSwitchDetailed: forkJoin(
         meterClosetSlsSwitchDetailedPictureUrl,
-      ),
+      ).pipe(map((o) => o.filter((e) => e.id !== undefined))),
       floorHeatingDistributionWithDoorOpen: forkJoin(
         floorHeatingDistributionWithDoorOpenPictureUrl,
-      ),
+      ).pipe(map((o) => o.filter((e) => e.id !== undefined))),
     }).pipe(
       switchMap((data) => {
         const picturesToCreate: PicturesDao = {

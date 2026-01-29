@@ -1,3 +1,4 @@
+/* @vite-ignore */
 import { defineAsyncComponent, type Component } from 'vue';
 
 const path = './../components/';

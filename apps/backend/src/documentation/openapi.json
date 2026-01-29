@@ -32,6 +32,36 @@
         ]
       }
     },
+    "/api/lead-intake-funnel/leadId/{leadId}": {
+      "get": {
+        "operationId": "AppController_getLeadData",
+        "parameters": [
+          {
+            "name": "leadId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadIntakeFunnelDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "LeadIntakeFunnel"
+        ]
+      }
+    },
     "/api/lead-intake-funnel/upload": {
       "post": {
         "operationId": "AppController_uploadFile",
@@ -582,6 +612,262 @@
           "updatedAt"
         ]
       },
+      "LeadIntakeFunnelDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lead id"
+          },
+          "version": {
+            "type": "string",
+            "description": "Lead version"
+          },
+          "contactId": {
+            "type": "string",
+            "description": "Contact id reference"
+          },
+          "buildingId": {
+            "type": "string",
+            "description": "Building id reference"
+          },
+          "heatingSystemId": {
+            "type": "string",
+            "description": "Heating system id reference"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "Project id reference"
+          },
+          "leadResponseId": {
+            "type": "string",
+            "description": "Lead response id reference"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "contactId",
+          "buildingId",
+          "heatingSystemId",
+          "projectId",
+          "leadResponseId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ProjectDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Project id"
+          },
+          "timeline": {
+            "type": "string",
+            "description": "Project timeline"
+          },
+          "householdIncome": {
+            "type": "string",
+            "description": "Household income"
+          },
+          "statusOfFoundationConstruction": {
+            "type": "string",
+            "description": "Status of foundation construction"
+          },
+          "infosLeadsource": {
+            "type": "string",
+            "description": "Additional information from lead source"
+          },
+          "fullReplacementOfHeatingSystemPlanned": {
+            "type": "boolean",
+            "description": "Full replacement of heating system planned"
+          },
+          "additionalDisposal": {
+            "type": "array",
+            "description": "Additional disposal options. Possible values: oil_tank_plastic_up_to_5000l, oil_tank_plastic_more_than_5000l, oil_tank_steel_up_to_5000l, oil_tank_steel_more_than_5000l, heatpump, liquid_gas_tank",
+            "items": {
+              "type": "string",
+              "enum": [
+                "oil_tank_plastic_up_to_5000l",
+                "oil_tank_plastic_more_than_5000l",
+                "oil_tank_steel_up_to_5000l",
+                "oil_tank_steel_more_than_5000l",
+                "heatpump",
+                "liquid_gas_tank"
+              ]
+            }
+          },
+          "shouldKeepSolarThermalSystem": {
+            "type": "boolean",
+            "description": "Should keep solar thermal system"
+          },
+          "picturesId": {
+            "type": "string",
+            "description": "Pictures ID reference"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "timeline",
+          "householdIncome",
+          "statusOfFoundationConstruction",
+          "infosLeadsource",
+          "fullReplacementOfHeatingSystemPlanned",
+          "additionalDisposal",
+          "shouldKeepSolarThermalSystem",
+          "picturesId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PictureUrl": {
+        "type": "object",
+        "properties": {}
+      },
+      "PictureUrlDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Picture URL id"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "HeatingSystemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Heating system id"
+          },
+          "consumption": {
+            "type": "number",
+            "description": "Consumption"
+          },
+          "consumptionUnit": {
+            "type": "string",
+            "description": "Consumption unit"
+          },
+          "systemType": {
+            "type": "string",
+            "description": "System type"
+          },
+          "constructionYearHeatingSystem": {
+            "type": "number",
+            "description": "Construction year heating system"
+          },
+          "constructionYearHeatingSystemString": {
+            "type": "string",
+            "description": "Construction year heating system string"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model"
+          },
+          "floorHeatingConnectedToReturnPipe": {
+            "type": "boolean",
+            "description": "Floor heating connected to return pipe"
+          },
+          "floorHeatingOwnHeatingCircuit": {
+            "type": "boolean",
+            "description": "Floor heating own heating circuit"
+          },
+          "floorHeatingOnlyInSmallRooms": {
+            "type": "boolean",
+            "description": "Floor heating only in small rooms"
+          },
+          "numberOfFloorHeatingDistributors": {
+            "type": "number",
+            "description": "Number of floor heating distributors"
+          },
+          "numberOfRadiators": {
+            "type": "number",
+            "description": "Number of radiators"
+          },
+          "domesticHotWaterByHeatpump": {
+            "type": "boolean",
+            "description": "Domestic hot water by heatpump"
+          },
+          "domesticHotWaterCirculationPump": {
+            "type": "string",
+            "description": "Domestic hot water circulation pump"
+          },
+          "domestic_water_station": {
+            "type": "string",
+            "description": "Domestic water station"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was created"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when record was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "consumption",
+          "consumptionUnit",
+          "systemType",
+          "constructionYearHeatingSystem",
+          "constructionYearHeatingSystemString",
+          "model",
+          "floorHeatingConnectedToReturnPipe",
+          "floorHeatingOwnHeatingCircuit",
+          "floorHeatingOnlyInSmallRooms",
+          "numberOfFloorHeatingDistributors",
+          "numberOfRadiators",
+          "domesticHotWaterByHeatpump",
+          "domesticHotWaterCirculationPump",
+          "domestic_water_station",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
       "CreateContactDto": {
         "type": "object",
         "properties": {
@@ -777,35 +1063,6 @@
           "domesticHotWaterByHeatpump",
           "domesticHotWaterCirculationPump",
           "domestic_water_station",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "PictureUrlDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Picture URL id"
-          },
-          "url": {
-            "type": "string",
-            "description": "URL"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Date when record was created"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Date when record was last updated"
-          }
-        },
-        "required": [
-          "id",
-          "url",
           "createdAt",
           "updatedAt"
         ]

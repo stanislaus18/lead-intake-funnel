@@ -4,6 +4,7 @@ import {
   catchError,
   combineLatest,
   forkJoin,
+  map,
   of,
   switchMap,
 } from 'rxjs';
@@ -92,5 +93,43 @@ export class LeadIntakeFunnelService {
     } catch {
       throw new HttpException('Contact information is required', 400);
     }
+  }
+
+  findLeadById(leadId: string): Observable<any> {
+    this.logger.log(`Finding lead with ID: ${leadId}`);
+
+    return this.leadIntakeFunnelRepository.findById(leadId).pipe(
+      switchMap((leadIntakeFunnelDao: LeadIntakeFunnelDao) => {
+        return combineLatest([
+          this.contactService.findById(leadIntakeFunnelDao.contactId),
+          leadIntakeFunnelDao.buildingId
+            ? this.buildingService.findById(leadIntakeFunnelDao.buildingId)
+            : of(null),
+          leadIntakeFunnelDao.heatingSystemId
+            ? this.heatingSystemService.findById(
+                leadIntakeFunnelDao.heatingSystemId,
+              )
+            : of(null),
+          leadIntakeFunnelDao.projectId
+            ? this.projectService.findById(leadIntakeFunnelDao.projectId)
+            : of(null),
+          of(leadIntakeFunnelDao),
+        ]);
+      }),
+      map(
+        ([contact, building, heatingSystem, project, leadIntakeFunnelDao]) => {
+          return {
+            id: leadId,
+            version: leadIntakeFunnelDao.version,
+            contact: contact,
+            building: building,
+            heatingSystem: heatingSystem,
+            project: project,
+            createdAt: leadIntakeFunnelDao.createdAt,
+            updatedAt: leadIntakeFunnelDao.updatedAt,
+          };
+        },
+      ),
+    );
   }
 }

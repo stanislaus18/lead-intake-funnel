@@ -6,9 +6,9 @@ import YesSvg from '@/assets/Yes.svg';
 
 import { setCurrentView, setFullReplacementOfHeatingSystemPlanned, setNotApplicableDetails } from './../composables';
 
-function onClicked(answer: string) {
+function onClicked(answer: boolean) {
   setFullReplacementOfHeatingSystemPlanned(answer);
-  if (answer === 'yes') {
+  if (answer) {
     setCurrentView('heatingDetails');
   } else {
     setNotApplicableDetails('ReplaceCurrentSystem');
@@ -25,7 +25,7 @@ function onClicked(answer: string) {
     <div class="button-container">
       <button
         class="box btn-item"
-        @click="onClicked('yes')"
+        @click="onClicked(true)"
       >
         <img
           :src="YesSvg"
@@ -35,7 +35,7 @@ function onClicked(answer: string) {
       </button>
       <button
         class="box btn-item"
-        @click="onClicked('no')"
+        @click="onClicked(false)"
       >
         <img
           :src="NoSvg"

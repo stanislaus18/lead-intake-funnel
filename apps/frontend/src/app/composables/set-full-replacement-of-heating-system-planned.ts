@@ -3,7 +3,7 @@ import { useLeadStore } from '../../stores/leadStore';
 const store = useLeadStore();
 
 export function setFullReplacementOfHeatingSystemPlanned(
-  fullReplacementOfHeatingSystemPlanned: string,
+  fullReplacementOfHeatingSystemPlanned: boolean,
 ) {
   store.lead = {
     ...store.lead,

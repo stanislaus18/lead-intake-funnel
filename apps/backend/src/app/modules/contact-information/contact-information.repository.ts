@@ -31,4 +31,22 @@ export class ContactInformationRepository {
       return of(null);
     }
   }
+
+  findById(id: string): Observable<ContactInformationDao> {
+    this.logger.log(`Finding contact information with ID: ${id}`);
+    try {
+      return from(
+        this.contactInformationModel.findOne(
+          { id },
+          { _id: 0, createdAt: 0, updatedAt: 0, id: 0 },
+        ),
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to find contact information with ID: ${id}`,
+        error,
+      );
+      return of(null);
+    }
+  }
 }

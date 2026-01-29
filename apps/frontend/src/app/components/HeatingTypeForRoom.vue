@@ -13,13 +13,13 @@ const store = useLeadStore();
 const items = [
   'Fußbodenheizung',
   'Heizkörper',
-  'Heizkörper und Fußbodenheizung',
+  'Heizkörper + Fußbodenheizung',
 ];
 
 const svgMap: Record<string, string> = {
   Fußbodenheizung: FussbodenheizungSvg,
   Heizkörper: HeizkörperSvg,
-  'Heizkörper und Fußbodenheizung': HeizkörperUndFussbodenheizungSvg,
+  'Heizkörper + Fußbodenheizung': HeizkörperUndFussbodenheizungSvg,
 };
 
 function selectedBuilding(item: string) {
@@ -33,7 +33,9 @@ function selectedBuilding(item: string) {
 </script>
 
 <template>
-  <p class="title">In was für einem Gebäude wohnst du?</p>
+  <p class="title">
+    In was für einem Gebäude wohnst du?
+  </p>
   <div class="building-container">
     <div
       v-for="item in items"
@@ -41,7 +43,10 @@ function selectedBuilding(item: string) {
       class="box"
       @click="selectedBuilding(item)"
     >
-      <img :src="svgMap[item]" alt="Building type image" />
+      <img
+        :src="svgMap[item]"
+        alt="Building type image"
+      >
       <p>{{ item }}</p>
     </div>
   </div>

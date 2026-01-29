@@ -2,7 +2,7 @@ import { useLeadStore } from '../../stores/leadStore';
 import { apiService } from '../service';
 
 export interface URL {
-  url: string;
+  id: IDBValidKey;
 }
 
 export interface Pictures {
@@ -30,6 +30,7 @@ export function setContactInformation(
   project: Project,
 ) {
   store.lead = {
+    version: '1.0.2',
     ...store.lead,
     contact: { ...store.lead.contact, contactInformation: contactInformation },
     project: {

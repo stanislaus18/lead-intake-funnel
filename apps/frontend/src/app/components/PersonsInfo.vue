@@ -6,7 +6,7 @@ import ImageUpload from './ImageUpload.vue';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import VamoPng from '@/assets/VamoLogo.png';
 import { Pictures } from '../composables/set-contact-information';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of, map, filter } from 'rxjs';
 
 const uploadDB = new UploadDBService();
 uploadDB.init$().subscribe();
@@ -104,7 +104,7 @@ function removeImage(index: number, imageType: string = 'outdoorUnitLocation') {
 
 function uploadImages(imageType: string = 'outdoorUnitLocation'): Observable<IDBValidKey>[] {
   if ((formData.value as any)[imageType].length === 0) {
-    return of([]) as any;
+    return [of(undefined as any)];
   }
 
   isUploadingImage.value = true;
@@ -160,12 +160,12 @@ function handleSubmit() {
   // Save form data and proceed only if valid
   if (isValid) {
     combineLatest([
-      combineLatest(uploadImages('outdoorUnitLocation')),
-      combineLatest(uploadImages('outdoorUnitLocationWithArea')),
-      combineLatest(uploadImages('heatingRoom')),
-      combineLatest(uploadImages('meterClosetWithDoorOpen')),
-      combineLatest(uploadImages('meterClosetSlsSwitchDetailed')),
-      combineLatest(uploadImages('floorHeatingDistributionWithDoorOpen'))
+      combineLatest(uploadImages('outdoorUnitLocation')).pipe(map(o => o.filter(id => id !== undefined))),
+      combineLatest(uploadImages('outdoorUnitLocationWithArea')).pipe(map(o => o.filter(id => id !== undefined))),
+      combineLatest(uploadImages('heatingRoom')).pipe(map(o => o.filter(id => id !== undefined))),
+      combineLatest(uploadImages('meterClosetWithDoorOpen')).pipe(map(o => o.filter(id => id !== undefined))),
+      combineLatest(uploadImages('meterClosetSlsSwitchDetailed')).pipe(map(o => o.filter(id => id !== undefined))),
+      combineLatest(uploadImages('floorHeatingDistributionWithDoorOpen')).pipe(map(o => o.filter(id => id !== undefined))),
     ]).subscribe({
       next: ([
         outdoorUnitLocation,
@@ -176,12 +176,12 @@ function handleSubmit() {
         floorHeatingDistributionWithDoorOpen
       ]) => {
         const pictures: Pictures = {
-          outdoorUnitLocation: outdoorUnitLocation?.map(id => ({ url: `${id}` })) || [],
-          outdoorUnitLocationWithArea: outdoorUnitLocationWithArea?.map(id => ({ url: `${id}` })) || [],
-          heatingRoom: heatingRoom?.map(id => ({ url: `${id}` })) || [],
-          meterClosetWithDoorOpen: meterClosetWithDoorOpen?.map(id => ({ url: `${id}` })) || [],
-          meterClosetSlsSwitchDetailed: meterClosetSlsSwitchDetailed?.map(id => ({ url: `${id}` })) || [],
-          floorHeatingDistributionWithDoorOpen: floorHeatingDistributionWithDoorOpen?.map(id => ({ url: `${id}` })) || []
+          outdoorUnitLocation: outdoorUnitLocation?.map(id => ({ id })) || [],
+          outdoorUnitLocationWithArea: outdoorUnitLocationWithArea?.map(id => ({ id })) || [],
+          heatingRoom: heatingRoom?.map(id => ({ id })) || [],
+          meterClosetWithDoorOpen: meterClosetWithDoorOpen?.map(id => ({ id })) || [],
+          meterClosetSlsSwitchDetailed: meterClosetSlsSwitchDetailed?.map(id => ({ id })) || [],
+          floorHeatingDistributionWithDoorOpen: floorHeatingDistributionWithDoorOpen?.map(id => ({ id })) || [],
         };
         useClicked(pictures);
         console.log('All images uploaded successfully');

@@ -42,7 +42,12 @@ export class OwnershipRelationshipsRepository {
     this.logger.log(`Finding ownershipRelationships with ID: ${id}`);
 
     try {
-      return from(this.ownershipRelationshipsModel.findOne({ id }));
+      return from(
+        this.ownershipRelationshipsModel.findOne(
+          { id },
+          { _id: 0, createdAt: 0, updatedAt: 0, id: 0 },
+        ),
+      );
     } catch (error) {
       this.logger.error(
         `Failed to find ownershipRelationships with ID: ${id}`,

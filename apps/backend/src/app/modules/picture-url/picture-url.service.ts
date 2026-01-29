@@ -18,8 +18,8 @@ export class PictureUrlService {
     try {
       return from(
         this.pictureUrlRepository.create({
-          id: uuidv4(),
-          url: pictureUrlDao.url,
+          id: pictureUrlDao.id,
+          url: '',
           createdAt: new Date(),
           updatedAt: new Date(),
         }),
@@ -44,15 +44,12 @@ export class PictureUrlService {
     }
   }
 
-  update(
-    id: string,
-    pictureUrlDao: Partial<PictureUrlDao>,
-  ): Observable<PictureUrlDao> {
+  update(id: string, urlPath: string): Observable<PictureUrlDao> {
     this.logger.log(`Updating picture URL with ID: ${id}`);
 
     try {
       return this.pictureUrlRepository.update(id, {
-        ...pictureUrlDao,
+        url: urlPath,
         updatedAt: new Date(),
       });
     } catch (error) {

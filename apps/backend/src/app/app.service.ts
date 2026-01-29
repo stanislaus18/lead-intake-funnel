@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 import { LeadStageEnum } from './types/enums';
-import { CreateLeadIntakeFunnelDto } from './modules/lead-intake-funnel/dto';
+import {
+  CreateLeadIntakeFunnelDto,
+  LeadIntakeFunnelDto,
+} from './modules/lead-intake-funnel/dto';
 import { LeadIntakeFunnelService } from './modules/lead-intake-funnel/lead-intake-funnel.service';
 import { Observable, of, switchMap } from 'rxjs';
 
@@ -188,5 +191,14 @@ export class AppService {
 
     // TODO implement selling logic
     return true;
+  }
+
+  find(leadId: string): Observable<any> {
+    try {
+      return this.leadIntakeFunnelService.findLeadById(leadId);
+    } catch (error) {
+      console.error('Error saving lead:', error);
+      throw error;
+    }
   }
 }

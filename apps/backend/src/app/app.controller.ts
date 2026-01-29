@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -13,7 +15,10 @@ import { LeadResponseDto } from './dto/lead-response.dto';
 import { FilesService } from './file-upload-service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Express from 'express';
-import { CreateLeadIntakeFunnelDto } from './modules/lead-intake-funnel/dto';
+import {
+  CreateLeadIntakeFunnelDto,
+  LeadIntakeFunnelDto,
+} from './modules/lead-intake-funnel/dto';
 import { Observable } from 'rxjs';
 import { BuildingDto } from './modules/building/dto';
 import { ContactDto } from './modules/contact/dto';
@@ -24,6 +29,10 @@ import { BuildingInformationDto } from './modules/building-information/dto';
 import { OwnershipRelationshipsDto } from './modules/ownership-relationships/dto';
 import { EnergyRelevantInformationDto } from './modules/energy-relevant-information/dto';
 import { HotWaterDto } from './modules/hot-water/dto';
+import { ProjectDto } from './modules/project/dto';
+import { PictureUrlDto } from './modules/picture-url/dto';
+import { PictureUrl } from './modules/picture-url/model';
+import { HeatingSystemDto } from './modules/heating-system/dto';
 
 @ApiExtraModels(
   LeadResponseDto,
@@ -36,6 +45,11 @@ import { HotWaterDto } from './modules/hot-water/dto';
   OwnershipRelationshipsDto,
   EnergyRelevantInformationDto,
   HotWaterDto,
+  LeadIntakeFunnelDto,
+  ProjectDto,
+  PictureUrl,
+  PictureUrlDto,
+  HeatingSystemDto,
 )
 @ApiTags('LeadIntakeFunnel')
 @Controller('lead-intake-funnel')
@@ -54,6 +68,20 @@ export class AppController {
 
     try {
       return this.appService.validateLead(createLeadIntakeFunnelDto);
+    } catch {
+      throw new HttpException('Lead validation failed', 424);
+    }
+  }
+
+  @Get('leadId/:leadId')
+  @ApiOkResponse({ type: LeadIntakeFunnelDto })
+  getLeadData(
+    @Param('leadId') leadId: string,
+  ): Observable<LeadIntakeFunnelDto> {
+    console.log('get Lead Data', leadId);
+
+    try {
+      return this.appService.find(leadId);
     } catch {
       throw new HttpException('Lead validation failed', 424);
     }

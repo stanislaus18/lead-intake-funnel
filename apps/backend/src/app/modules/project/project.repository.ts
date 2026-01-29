@@ -38,17 +38,19 @@ export class ProjectRepository {
     this.logger.log(`Finding project with ID: ${id}`);
 
     try {
-      return from(this.projectModel.findOne({ id }));
+      return from(
+        this.projectModel.findOne(
+          { id },
+          { _id: 0, createdAt: 0, updatedAt: 0, id: 0 },
+        ),
+      );
     } catch (error) {
       this.logger.error(`Failed to find project with ID: ${id}`, error);
       return of(null);
     }
   }
 
-  update(
-    id: string,
-    projectDao: Partial<ProjectDao>,
-  ): Observable<ProjectDao> {
+  update(id: string, projectDao: Partial<ProjectDao>): Observable<ProjectDao> {
     this.logger.log(`Updating project with ID: ${id}`);
 
     try {

@@ -5,7 +5,7 @@ const items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function selectNoOfPersons(item: number) {
   // set into the state
-  setPersonsHousehold(item.toString());
+  setPersonsHousehold(item);
   setCurrentView('heatingFuel');
 }
 </script>

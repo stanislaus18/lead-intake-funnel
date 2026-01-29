@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { useLeadStore } from './../../stores/leadStore';
 import { setCurrentView, setInstallationLocationCeilingHeight, setNotApplicableDetails } from './../composables';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import FlurhoheSVG from '@/assets/Flurhohe.avif';
 
-const store = useLeadStore();
-
-const items = ['niedrig als 180cm', '180-199cm', 'hoher als 199cm'];
+const items = ['niedriger als 180 cm', '180 - 199 cm', 'höher als 199 cm'];
 
 function selectHeight(item: string) {
   setInstallationLocationCeilingHeight(item);
-  if (item === 'niedrig als 180cm') {
+  if (item === 'niedriger als 180 cm') {
     setNotApplicableDetails('HeatingRoomHeight');
     setCurrentView('notApplicable');
     return;

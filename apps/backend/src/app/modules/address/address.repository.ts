@@ -38,7 +38,12 @@ export class AddressRepository {
     this.logger.log(`Finding address with ID: ${id}`);
 
     try {
-      return from(this.addressModel.findOne({ id }));
+      return from(
+        this.addressModel.findOne(
+          { id },
+          { _id: 0, createdAt: 0, updatedAt: 0, id: 0 },
+        ),
+      );
     } catch (error) {
       this.logger.error(`Failed to find address with ID: ${id}`, error);
       return of(null);

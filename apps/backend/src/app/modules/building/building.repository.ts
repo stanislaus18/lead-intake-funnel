@@ -38,7 +38,12 @@ export class BuildingRepository {
     this.logger.log(`Finding building with ID: ${id}`);
 
     try {
-      return from(this.buildingModel.findOne({ id }));
+      return from(
+        this.buildingModel.findOne(
+          { id },
+          { _id: 0, createdAt: 0, updatedAt: 0, id: 0 },
+        ),
+      );
     } catch (error) {
       this.logger.error(`Failed to find building with ID: ${id}`, error);
       return of(null);

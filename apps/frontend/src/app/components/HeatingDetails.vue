@@ -51,7 +51,9 @@ defineExpose({
 
 <template>
   <div class="container">
-    <p class="title">Beheizte und beheizbare Fläche</p>
+    <p class="title">
+      Beheizte und beheizbare Fläche
+    </p>
     <p class="description">
       Damit wir deine neue Wärmepumpe optimal auslegen können, benötigen wir die
       Fläche aller Räume, die über einen funktionsfähigen Heizkörper und / oder
@@ -64,11 +66,17 @@ defineExpose({
       </p>
       <input
         v-model="totalArea"
+        v-between-error="{ min: 10, max: 1000, errorClass: 'input-error' }"
         type="number"
         placeholder="Fläche in m² eingeben"
         :class="['input', { 'input-error': errors.totalArea }]"
-      />
-      <p v-if="errors.totalArea" class="error-message">Dieses Feld ist erforderlich</p>
+      >
+      <p
+        v-if="errors.totalArea"
+        class="error-message"
+      >
+        Dieses Feld ist erforderlich
+      </p>
     </div>
     <div class="form-group">
       <p class="label">
@@ -79,8 +87,13 @@ defineExpose({
         type="number"
         placeholder="Fläche in m² eingeben"
         :class="['input', { 'input-error': errors.heatedArea }]"
-      />
-      <p v-if="errors.heatedArea" class="error-message">Dieses Feld ist erforderlich</p>
+      >
+      <p
+        v-if="errors.heatedArea"
+        class="error-message"
+      >
+        Dieses Feld ist erforderlich
+      </p>
     </div>
   </div>
 </template>

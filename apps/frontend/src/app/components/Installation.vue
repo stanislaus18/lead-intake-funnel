@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { useLeadStore } from './../../stores/leadStore';
 import { setInstallationTimeline, setCurrentView } from './../composables';
 
-const store = useLeadStore();
-
-const items = ['Sobald wie möglich', '3 - 6 Monate', '6-12 Monate', '12 - 24 Monate', 'Mehr als 24 Monate'];
+const items = ['Sofort', '1-3 Monate', '3-6 Monate', '>6 Monate'];
 
 function selectUnit(item: string) {
   // set into the state
@@ -18,7 +15,12 @@ function selectUnit(item: string) {
     Ab wann willst du ultra-effizient heizen?
   </p>
   <div class="list-container">
-    <div class="list-item" v-for="item in items" :key="item" @click="selectUnit(item)">
+    <div
+      v-for="item in items"
+      :key="item"
+      class="list-item"
+      @click="selectUnit(item)"
+    >
       {{ item }}
     </div>
   </div>
