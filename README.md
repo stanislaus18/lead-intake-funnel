@@ -2,6 +2,10 @@
 
 A modern web application for managing lead intake and qualification in the renewable energy sector. The application features a Vue.js frontend, NestJS backend, MongoDB database, and offline-first capabilities with IndexedDB and Service Workers.
 
+## High level architectural diagram
+
+![alt text](Architectural_diagram.png)
+
 ## Table of Contents
 
 - [Features](#features)
@@ -41,10 +45,12 @@ A modern web application for managing lead intake and qualification in the renew
 
 ### Backend
 - **NestJS** - Progressive Node.js framework
-- **TypeORM** - ORM for database operations
+- **Mongoose** - MongoDB object modeling
 - **MongoDB** - NoSQL database
 - **Express** - Web server framework
-- **Multer** - File upload middleware
+- **RxJS** - Reactive programming with Observables
+- **Class Validator** - DTO validation
+- **UUID** - Unique identifier generation
 
 ### Tools & Libraries
 - **Nx** - Monorepo management
@@ -120,39 +126,56 @@ MONGO_DB=lead_intake_funnel
 NODE_ENV=development
 ```
 
-### 4. Start MongoDB
+### 4. Start MongoDB and all services
 
-**Option A: Using Docker Compose**
+**Using Docker Compose (Recommended)**
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-**Option B: Local MongoDB**
-Ensure MongoDB is running locally on `mongodb://localhost:27017`
+This starts:
+- MongoDB on port 27017
+- Backend API on port 3000
+- Frontend on port 4200
+
+**Local MongoDB Setup (Alternative)**
+```bash
+# Install MongoDB locally, then start with:
+mongosh mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin
+```
+
+**Run database migrations**
+```bash
+pnpm nx run backend:migration:up
+```
 
 ## Development
 
-### Start both frontend and backend
+### Using Docker Compose (Recommended)
+```bash
+docker-compose up --build
+```
 
+This starts all services:
+- **Backend API**: http://localhost:3000
+- **Frontend**: http://localhost:4200
+- **MongoDB**: mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin
+
+### Local Development (Without Docker)
+
+**Start backend with watch mode**
+```bash
+pnpm nx serve backend
+```
+
+**Start frontend with watch mode**
+```bash
+pnpm nx serve frontend
+```
+
+**Start both in parallel**
 ```bash
 pnpm dev
-```
-
-Or start them individually:
-
-**Frontend (Vue.js on port 4200)**
-```bash
-pnpm frontend
-```
-
-**Backend (NestJS on port 3000)**
-```bash
-pnpm backend
-```
-
-### Watch mode for backend
-```bash
-pnpm nx build backend --watch
 ```
 
 ## Building
@@ -222,47 +245,128 @@ mongodb://root:root@localhost:27017/lead_intake_funnel?authSource=admin
 ### Running Migrations
 
 ```bash
-pnpm nx run backend:migration:run
+# Run all pending migrations
+pnpm nx run backend:migration:up
+
+# View migration status
+pnpm nx run backend:migration:show
 ```
+
+## Architecture Pattern: DAO/Model/DTO/Repository/Service
+
+The backend follows a 5-layer modular architecture for each entity:
+
+### Entity Module Structure
+```
+modules/[entity-name]/
+├── [entity].dao.ts          # Data Access Object (interface)
+├── [entity].model.ts        # Mongoose schema
+├── [entity].dto.ts          # Data Transfer Object with validation
+├── create-[entity].dto.ts   # Creation-specific DTO
+├── [entity].repository.ts   # Database operations
+├── [entity].service.ts      # Business logic
+└── [entity].module.ts       # NestJS module with DI
+```
+
+### Service Pattern (RxJS Observables)
+All services follow a consistent pattern:
+
+```typescript
+@Injectable()
+export class [Entity]Service {
+  constructor(private readonly repository: [Entity]Repository) {}
+
+  create(dao: [Entity]Dao): Observable<string> {
+    return from(this.repository.create({
+      ...dao,
+      id: uuidv4(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })).pipe(map((result) => result.id));
+  }
+
+  findById(id: string): Observable<[Entity]Dao> {
+    try {
+      return this.repository.findById(id);
+    } catch (error) {
+      return of(null);
+    }
+  }
+
+  update(id: string, partial: Partial<[Entity]Dao>): Observable<[Entity]Dao> {
+    return from(this.repository.update(id, {
+      ...partial,
+      updatedAt: new Date(),
+    }));
+  }
+
+  delete(id: string): Observable<any> {
+    return from(this.repository.delete(id));
+  }
+}
+```
+
+## Entity Modules
+
+The backend includes 14 entity modules for lead management:
+
+1. **Contact** - Contact person information (orchestrates 3 child entities)
+2. **Address** - Street address, postal code, country
+3. **ContactInformation** - Email, phone, communication preferences
+4. **Building** - Building metadata (orchestrates 5 child entities)
+5. **BuildingInformation** - Building type, year, area
+6. **OwnershipRelationships** - Ownership type and details
+7. **EnergyRelevantInformation** - Energy consumption, efficiency
+8. **HotWater** - Hot water system details
+9. **HeatingSystem** - Heating system configuration and metrics
+10. **Project** - Project timeline and installation options
+11. **Pictures** - Collection of location-specific picture URLs
+12. **PictureUrl** - Individual picture URL storage
+13. **LeadResponse** - Lead stage and booking information
+14. **LeadIntakeFunnel** - Root entity aggregating all lead data
+
+### Enum Validation
+
+Projects use enums for type-safe validation:
+
+```typescript
+// Example: DisposalTypeEnum for additionalDisposal
+@IsEnum(DisposalTypeEnum, { each: true })
+additionalDisposal: DisposalTypeEnum[];
+```
+
+## Repository Pattern
 
 ## File Upload
 
 ### How it works
 
 1. **Frontend**: User uploads images in PersonsInfo component
-2. **IndexedDB**: Images are stored locally in IndexedDB
+2. **IndexedDB**: Images are stored locally with offline capability
 3. **Service Worker**: Background sync triggers when online
-4. **Backend**: Images are uploaded to the server via `/api/lead-intake-funnel/upload`
-5. **MongoDB**: File references are stored in lead records
+4. **Backend**: Images are uploaded to MongoDB via file stream
+5. **MongoDB**: File data is embedded in lead records
 
-### Upload Endpoint
+### Upload Flow
 
-**POST** `/api/lead-intake-funnel/upload`
-
-**Request (FormData)**
-```
-- id: string (database record ID)
-- file: File (binary file data)
-```
-
-**Response**
-```json
-{
-  "message": "File uploaded successfully",
-  "id": "abc123..."
-}
-```
+- User selects multiple images in PersonsInfo.vue
+- Images are validated client-side (size, type)
+- RxJS combineLatest manages concurrent uploads
+- Service Worker handles background sync when offline
+- Successfully uploaded image URLs are stored as string arrays in Pictures entity
 
 ## Service Worker
 
 ### Features
 
-- Offline image storage
-- Background sync using Background Sync API
+- Offline-first image storage with IndexedDB
+- Automatic background sync with [Background Sync API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Sync_API)
 - Automatic retry on connection restore
 - Message-based communication with frontend
 
-### Manual Upload Trigger
+### Manual Trigger
+
+If needed, you can manually trigger image upload:
 
 ```javascript
 navigator.serviceWorker.ready.then(registration => {
@@ -272,83 +376,117 @@ navigator.serviceWorker.ready.then(registration => {
 });
 ```
 
-### Background Sync Registration
-
-The Service Worker automatically registers a background sync tag `'upload-images'` when images need uploading.
-
-## Repository Pattern
-
-The repository pattern is used for all database operations:
-
-```typescript
-// In app.repository.ts
-- createLead(leadData): Promise<any>
-- findLeadById(id: string): Promise<any>
-- findAllLeads(): Promise<any[]>
-- updateLead(id: string, leadData): Promise<any>
-- deleteLead(id: string): Promise<boolean>
-- addFileToLead(leadId: string, fileId: string, fileType: string): Promise<any>
-- getLeadFiles(leadId: string): Promise<any[]>
-```
-
-## Key Components
+## Frontend Components
 
 ### PersonsInfo.vue
-Main form component that collects lead information and handles image uploads. Features:
-- Multi-field form validation
-- Image upload with preview
-- Real-time error feedback
-- IndexedDB integration
+Main multi-step form collecting lead information:
+- Contact details (name, email, phone)
+- Building information and selection
+- Heating system configuration
+- Project timeline and options
+- Image uploads for 6 different locations
+- Form validation with real-time feedback
+- RxJS Observable-based image processing
 
-### ImageUpload.vue
-Reusable child component for image uploads:
-- Multiple file selection
-- Image previews in grid layout
-- Individual remove functionality
-- Upload state management
-
-### UploadDBService
-IndexedDB service for offline storage:
-- Image saving and retrieval
-- Offline queue management
-- Sync status tracking
+### Key Features
+- Progressive form with step indicators
+- Image upload with preview grids
+- Offline-first with IndexedDB caching
+- Service Worker integration
+- Reactive state management with Pinia
 
 ## Debugging
 
 ### Enable debug logs
-Set `DEBUG=*` environment variable:
 ```bash
 DEBUG=* pnpm dev
 ```
 
 ### Check IndexedDB
-Open browser DevTools → Application → IndexedDB → offline-db
+Browser DevTools → Application → IndexedDB → offline-db
 
 ### Monitor Service Worker
-DevTools → Application → Service Workers
+Browser DevTools → Application → Service Workers
+
+### View backend logs
+```bash
+docker-compose logs backend -f
+```
+
+### Check MongoDB data
+```bash
+docker exec -it lead-intake-funnel-mongo-1 mongosh -u root -p root lead_intake_funnel
+```
 
 ## Common Issues & Solutions
 
+### Docker Container Won't Start
+- Ensure Docker Desktop is running
+- Check ports 3000, 4200, 27017 are available
+- Clear Docker cache: `docker system prune`
+
 ### MongoDB Connection Error
-- Ensure MongoDB is running: `docker-compose up -d`
-- Check connection string in `app.module.ts`
+- Verify Docker Compose is running: `docker-compose ps`
+- Check connection string matches: `mongodb://root:root@mongo:27017/lead_intake_funnel?authSource=admin`
+- Ensure network exists: `docker network ls`
+
+### Missing 'yargs' Module Error
+- Rebuild Docker image: `docker-compose up --build`
+- Ensure `pnpm install --frozen-lockfile --recursive` runs in Dockerfile
 
 ### Image Upload Fails
-- Check Service Worker registration
-- Verify backend API endpoint is accessible
-- Check browser console for errors
+- Check browser DevTools → Console for errors
+- Verify backend is running on port 3000
+- Check Service Worker registration in DevTools
+- Inspect network requests for API errors
 
-### TypeORM Entity Not Found
-- Ensure entity is imported in `app.module.ts`
-- Verify entity file location and naming
+### API Endpoint Not Found (404)
+- Verify lead-intake-funnel controller is mounted in app.module
+- Check NestJS routing with `npx nx show project backend`
+- Ensure database migrations have run: `pnpm nx run backend:migration:show`
+
+## API Documentation
+
+View auto-generated Swagger documentation when backend is running:
+
+```
+http://localhost:3000/api/docs
+```
+
+Endpoints are organized by entity:
+- `/api/contact` - Contact management
+- `/api/building` - Building information
+- `/api/heating-system` - Heating system
+- `/api/project` - Project details
+- `/api/pictures` - Picture collections
+- `/api/lead-intake-funnel` - Lead management
+
+## Testing
+
+### Run backend tests
+```bash
+pnpm nx test backend
+```
+
+### Run backend with coverage
+```bash
+pnpm nx test backend --coverage
+```
+
+### Run E2E tests
+```bash
+pnpm nx e2e backend-e2e
+pnpm nx e2e frontend-e2e
+```
 
 ## Contributing
 
-1. Create a feature branch
-2. Make your changes
+1. Create a feature branch from `main`
+2. Make your changes following existing patterns
 3. Run tests: `pnpm test`
-4. Commit with clear messages
-5. Submit pull request
+4. Run migrations: `pnpm nx run backend:migration:up`
+5. Commit with clear messages
+6. Push and create pull request
 
 ## License
 
@@ -357,6 +495,18 @@ Proprietary - Vamo Energy
 ## Support
 
 For issues and questions, contact the development team.
+
+## Additional Resources
+
+### Nx Documentation
+- [Run tasks](https://nx.dev/features/run-tasks)
+- [Generators](https://nx.dev/features/generate-code)
+
+### Technology Docs
+- [NestJS](https://docs.nestjs.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [Vue 3](https://vuejs.org/)
+- [RxJS](https://rxjs.dev/)
 
 ## Run tasks
 
